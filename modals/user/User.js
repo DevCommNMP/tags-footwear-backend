@@ -9,12 +9,12 @@ const crypto = require('crypto');
 const userSchema = new mongoose.Schema({
     // First name of the user
     firstName: {
-        required: [true, 'First name is required'],
+        // required: [true, 'First name is required'],
         type: String,
     },
     // Last name of the user
     lastName: {
-        required: [true, 'Last name is required'],
+        // required: [true, 'Last name is required'],
         type: String,
     },
     // Gender of the user (optional)
@@ -31,16 +31,17 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Email is required'],
         type: String,
     },
+    username:{
+        required:[true,"Username is required"],
+        type:String,
+    },
     // Password of the user
     password: {
         required: [true, 'Password is required'],
         type: String,
     },
     // Phone number of the user
-    phoneNo: {
-        required: [true, 'Phone number is required'],
-        type: String,
-    },
+  
     // Flag indicating if the user is an admin
     isAdmin: {
         type: Boolean,
