@@ -32,13 +32,9 @@ const registerUser = expressAsyncHandler(async (req, res) => {
   }
 });
 
-
-//-------------------------------login ctrl--------------------------------------------------
-//controller to login user
 const login = expressAsyncHandler(async (req, res) => {
   try {
     const { password } = req.body;
-
     const userFound = await User.findOne({ email: req?.body?.email });
 
     if (!userFound) {
@@ -46,25 +42,29 @@ const login = expressAsyncHandler(async (req, res) => {
     }
 
     if (userFound && (await userFound.isPasswordMatched(password))) {
-      res.json({
-        id: userFound?._id,
-        email: userFound?.email,
-        firstName: userFound?.firstName,
-        lastName: userFound?.lastName,
-        profileImage: userFound?.profilePhoto,
-        isAdmin: userFound?.isAdmin,
-        token: generateToken(userFound._id),
+      const token = generateToken(userFound._id);
+      console.log("Printing token:", token);
+
+      // Set the cookie with the secure flag for HTTPS (if applicable):
+      res.cookie('authToken', token, {
+        
+        expires: new Date(Date.now() + 24 * 3600000),
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production' // Only for production
+      }).json({
+        email: userFound.email,
+        username:userFound.username,
       });
+
+      res.status(200).json({ token }); // Send the token in the response body
     } else {
-      res.status(401);
-      throw new Error("Invalid Password");
+      return res.status(401).json({ message: "Invalid Password" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(error); // Log for debugging
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
-
 
 
 module.exports={

@@ -1,6 +1,6 @@
 // Import the Express.js library
 const express = require('express');
-
+const cookieParser = require('cookie-parser');
 // Create an instance of the Express application
 const app = express();
 
