@@ -40,20 +40,20 @@ const login = expressAsyncHandler(async (req, res) => {
     const { password } = req.body;
 
     const userFound = await User.findOne({ email: req?.body?.email });
-
+   const token= generateToken(userFound._id);
     if (!userFound) {
       return res.status(401).json({ message: "Invalid Email" });
     }
 
     if (userFound && (await userFound.isPasswordMatched(password))) {
-      res.json({
+      res.cookie('token', token, { httpOnly: true }).json({
         id: userFound?._id,
         email: userFound?.email,
         firstName: userFound?.firstName,
         lastName: userFound?.lastName,
         profileImage: userFound?.profilePhoto,
         isAdmin: userFound?.isAdmin,
-        token: generateToken(userFound._id),
+        token: token
       });
     } else {
       res.status(401);
@@ -70,4 +70,4 @@ const login = expressAsyncHandler(async (req, res) => {
 module.exports={
     registerUser,
     login,
-}
+} 

@@ -14,7 +14,7 @@ const dbConnect = require('./database/connectDB');
 const seedData=require('./seed')
 // Define CORS middleware configuration
 // Define an array of allowed origins
-const allowedOrigins = ['http://localhost:5174','https://wonderful-clafoutis-70951b.netlify.app'];
+const allowedOrigins = ['http://localhost:5173','https://wonderful-clafoutis-70951b.netlify.app'];
 
 // Define CORS middleware configuration
 const corsOptions = {
@@ -42,10 +42,12 @@ const authRoute=require('./routes/authRoutes/authRoute');
 const productsRoute=require('./routes/productRoutes/productsRoutes');
 const reviewroutes=require('./routes/reviewRoutes/reviewRoutes')
 const categoriesRoute=require('./routes/catogriesRoutes/mainCategoriesRoute/mainCategoriesRoutes')
+const premiumLeather=require('./routes/premiumLeatherRoutes/premiumLeatherRoutes')
 app.use('/api',authRoute);
 app.use('/api',productsRoute);
 app.use('/api',reviewroutes);
 app.use('/api',categoriesRoute);
+app.use('/api',premiumLeather);
 
 //allowing server to use port dynamically 
 const PORT = process.env.PORT || 5000;

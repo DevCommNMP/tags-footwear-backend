@@ -1,11 +1,9 @@
-// review.js
-
 const mongoose = require('mongoose');
 
 const reviewSchema = new mongoose.Schema({
   product: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product',
+    refPath: 'onModel', // Reference to either 'Product' or 'LeatherProduct' model based on the 'onModel' field
     required: true
   },
   user: {
@@ -26,6 +24,11 @@ const reviewSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now
+  },
+  onModel: {
+    type: String,
+    required: true,
+    enum: ['Product', 'LeatherProduct'] // Allowed values for the 'onModel' field
   }
 });
 

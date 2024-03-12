@@ -10,7 +10,7 @@ const dbConnect=async()=>{
     try{
         //added to prevent deprecation warning  for strict Query
 
-        mongoose.connect(DB_URL || DB_URL2) 
+        mongoose.connect(DB_URL2) 
 
         console.log("db connected");
     }
