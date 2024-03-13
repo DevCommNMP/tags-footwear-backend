@@ -36,24 +36,20 @@ const login = expressAsyncHandler(async (req, res) => {
   try {
     const { password } = req.body;
     const userFound = await User.findOne({ email: req?.body?.email });
-
+   const token= generateToken(userFound._id);
     if (!userFound) {
       return res.status(401).json({ message: "Invalid Email" });
     }
 
     if (userFound && (await userFound.isPasswordMatched(password))) {
-      const token = generateToken(userFound._id);
-      console.log("Printing token:", token);
-
-      // Set the cookie with the secure flag for HTTPS (if applicable):
-      res.cookie('authToken', token, {
-        
-        expires: new Date(Date.now() + 24 * 3600000),
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production' // Only for production
-      }).json({
-        email: userFound.email,
-        username:userFound.username,
+      res.cookie('token', token, { httpOnly: true }).json({
+        id: userFound?._id,
+        email: userFound?.email,
+        firstName: userFound?.firstName,
+        lastName: userFound?.lastName,
+        profileImage: userFound?.profilePhoto,
+        isAdmin: userFound?.isAdmin,
+        token: token
       });
 
       res.status(200).json({ token }); // Send the token in the response body
@@ -70,4 +66,4 @@ const login = expressAsyncHandler(async (req, res) => {
 module.exports={
     registerUser,
     login,
-}
+} 
