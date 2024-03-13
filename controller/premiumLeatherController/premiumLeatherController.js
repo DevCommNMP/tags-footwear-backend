@@ -24,8 +24,9 @@ const getPremiumLeatherById = async (req, res) => {
   }
 };// Create a new premium leather shoe
 const createPremiumLeather = async (req, res) => {
+  console.log(req.body)
   const shoe = new PremiumLeather({
-    name: req.body.name,
+    productName: req.body.name,
     brand: req.body.brand,
     category: req.body.category,
     description: req.body.description,

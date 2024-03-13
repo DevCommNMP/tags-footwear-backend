@@ -1,6 +1,6 @@
 const mongoose=require('mongoose')
 const premiumLeatherShoeSchema = new mongoose.Schema({
-    name: {
+    productName: {
       type: String,
       required: true
     },
