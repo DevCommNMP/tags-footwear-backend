@@ -1,70 +1,80 @@
-const mainCategories = require('../../../modals/category/mainCategories');
-
-const createCategory = async (req, res) => {
-  try {
-    const category = await mainCategories.create(req.body);
-    res.status(201).json(category);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+const Category = require('../../../modals/category/mainCategories');
+// const Category = require('../models/category');
 
 // Controller function to get all categories
- const getAllCategories = async (req, res) => {
+const getAllCategories = async (req, res) => {
   try {
-    const categories = await mainCategories.find();
-    res.json(categories);
+    const categories = await Category.find();
+    res.status(200).json(categories);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error getting categories:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
-// Controller function to get a category by ID
+// Controller function to get a single category by ID
 const getCategoryById = async (req, res) => {
-  const { Id } = req.params;
   try {
-    const category = await mainCategories.findById(Id);
+    const category = await Category.findById(req.params.Id);
     if (!category) {
-      return res.status(404).json({ message: 'Category not found' });
+      return res.status(404).json({ error: 'Category not found' });
     }
-    res.json(category);
+    res.status(200).json(category);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error getting category by ID:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// Controller function to create a new category
+const createCategory = async (req, res) => {
+  try {
+    const { name, icon, color } = req.body;
+    const newCategory = new Category({ name, icon, color });
+    const savedCategory = await newCategory.save();
+    res.status(201).json(savedCategory);
+  } catch (error) {
+    console.error('Error creating category:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
 // Controller function to update a category by ID
-const updateCategory= async (req, res) => {
-  const { Id } = req.params;
+const updateCategory = async (req, res) => {
   try {
-    const updatedCategory = await mainCategories.findByIdAndUpdate(Id, req.body, { new: true });
+    const updatedCategory = await Category.findByIdAndUpdate(
+      req.params.Id,
+      req.body,
+      { new: true }
+    );
     if (!updatedCategory) {
-      return res.status(404).json({ message: 'Category not found' });
+      return res.status(404).json({ error: 'Category not found' });
     }
-    res.json(updatedCategory);
+    res.status(200).json(updatedCategory);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error updating category:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
 // Controller function to delete a category by ID
 const deleteCategory = async (req, res) => {
-  const { Id } = req.params;
   try {
-    const deletedCategory = await mainCategories.findByIdAndDelete(Id);
+    const deletedCategory = await Category.findByIdAndDelete(req.params.Id);
     if (!deletedCategory) {
-      return res.status(404).json({ message: 'Category not found' });
+      return res.status(404).json({ error: 'Category not found' });
     }
-    res.json({ message: 'Category deleted successfully' });
+    res.status(200).json({ message: 'Category deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error deleting category:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
-module.exports={
-    createCategory,
-    getAllCategories,
-    getCategoryById,
-    updateCategory,
-    deleteCategory
-}
+module.exports = {
+  getAllCategories,
+  getCategoryById,
+  createCategory,
+  updateCategory,
+  deleteCategory
+};

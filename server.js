@@ -43,11 +43,13 @@ const productsRoute=require('./routes/productRoutes/productsRoutes');
 const reviewroutes=require('./routes/reviewRoutes/reviewRoutes')
 const categoriesRoute=require('./routes/catogriesRoutes/mainCategoriesRoute/mainCategoriesRoutes')
 const premiumLeather=require('./routes/premiumLeatherRoutes/premiumLeatherRoutes')
+const subCategories=require('./routes/catogriesRoutes/mainCategoriesRoute/subCategoriesRoutes')
 app.use('/api',authRoute);
 app.use('/api',productsRoute);
 app.use('/api',reviewroutes);
 app.use('/api',categoriesRoute);
 app.use('/api',premiumLeather);
+app.use('/api',subCategories)
 
 //allowing server to use port dynamically 
 const PORT = process.env.PORT || 5000;
