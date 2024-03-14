@@ -5,13 +5,20 @@ const router = express.Router();
 const {getAllProducts,getProductById,
     createProduct,
     updateProduct,
+    uploadProductImage,
     deleteProduct,} = require('../../controller/productsController/productController');
 
+    const productImageUpload=require('../../config/multerConfig/productImageUpload')
+    // .post(productImage.single('productImage'),createProduct)
+   //   .post(upload.array('photos', 5), productController.addProduct)
 
 // Route to get all products
 router.get('/products', getAllProducts);
 // Route to create  prodduct 
 router.post('/products', createProduct);
+//  upload product Image 
+router.post('/products/:id', productImageUpload.single("productImage"), uploadProductImage);
+
 
 // Route to get a single product by ID
 router.get('/products/:Id', getProductById);

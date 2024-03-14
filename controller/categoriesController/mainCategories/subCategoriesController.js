@@ -17,11 +17,12 @@ const getAllSubCategories = async (req, res) => {
 const getsubCategoryById = async (req, res) => {
   console.log(req.params.Id);
   try {
-    const subCategory = await subCategory.findById(req.params.Id);
-    if (!subCategory) {
+    const subcategory = await subCategory.findById(req.params.Id);
+  
+    if (!subcategory) {
       return res.status(404).json({ error: 'subCategory not found' });
     }
-    res.status(200).json(subCategory);
+    res.status(200).json(subcategory);
   } catch (error) {
     console.error('Error getting subCategory by ID:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -32,6 +33,11 @@ const getsubCategoryById = async (req, res) => {
 const createsubCategory = async (req, res) => {
   try {
     const { subcategoriesName, icon, color } = req.body;
+    const hasSubCategory=await subCategory.findOne({subcategoriesName});
+    if(hasSubCategory){
+      res.status(201).json({message:"SubCategory Should be unique"})
+      // return;                 
+    }
     const newsubCategory = new subCategory({ subcategoriesName, icon, color });
     const savedsubCategory = await newsubCategory.save();
     res.status(201).json(savedsubCategory);

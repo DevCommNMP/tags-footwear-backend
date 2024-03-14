@@ -60,3 +60,12 @@ const seedData = async () => {
   }
 };
 module.exports = seedData;
+
+
+
+
+
+
+
+
+

@@ -3,11 +3,10 @@ const mongoose = require('mongoose');
 const subcategoryTypeSchema = new mongoose.Schema({
   subcategoryTypeName: {
     type: String,
-    required: true
   },
   icon: {
     type: String,
-    required: true
+    // required: true
   },
   color: String
 });

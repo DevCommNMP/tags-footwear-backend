@@ -61,11 +61,33 @@ const deleteProduct = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+const uploadProductImage = async (req, res) => {
+    try {
+      // Check if file is uploaded
+      if (!req.file) {
+        return res.status(400).json({ message: 'No image uploaded' });
+      }
+  
+      // Construct image URL
+      const imageUrl = req.protocol + '://' + req.get('host') + '/' + req.file.path;
+//   console.log(imageUrl)
+      // Update product with image URL
+      const productId = req.params.productId;
+      const product = await Product.findByIdAndUpdate(productId, { productImage: imageUrl }, { new: true });
+  
+      // Return updated product
+      res.status(200).json({ message: 'Image uploaded successfully', product: product });
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
 
 module.exports = {
     getProductById,
     createProduct,
     updateProduct,
     deleteProduct,
-    getAllProducts
+    getAllProducts,
+    uploadProductImage
 };

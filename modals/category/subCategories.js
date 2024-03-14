@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const subcategoriesSchema = new mongoose.Schema({
   subcategoriesName: {
     type: String,
-    required: true
+    // required: true,
+   
   },
   icon: String,
   color: String

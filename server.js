@@ -1,5 +1,6 @@
 // Import the Express.js library
 const express = require('express');
+const path = require('path')
 const cookieParser = require('cookie-parser');
 // Create an instance of the Express application
 const app = express();
@@ -44,12 +45,16 @@ const reviewroutes=require('./routes/reviewRoutes/reviewRoutes')
 const categoriesRoute=require('./routes/catogriesRoutes/mainCategoriesRoute/mainCategoriesRoutes')
 const premiumLeather=require('./routes/premiumLeatherRoutes/premiumLeatherRoutes')
 const subCategories=require('./routes/catogriesRoutes/mainCategoriesRoute/subCategoriesRoutes')
+const subCategoriesType=require('./routes/catogriesRoutes/mainCategoriesRoute/subCategoryTypeRoutes')
+app.use('/assets/images/productImages', express.static(path.join(__dirname, 'assets/images/productImages')));
+
 app.use('/api',authRoute);
 app.use('/api',productsRoute);
 app.use('/api',reviewroutes);
 app.use('/api',categoriesRoute);
 app.use('/api',premiumLeather);
 app.use('/api',subCategories)
+app.use('/api',subCategoriesType)
 
 //allowing server to use port dynamically 
 const PORT = process.env.PORT || 5000;
