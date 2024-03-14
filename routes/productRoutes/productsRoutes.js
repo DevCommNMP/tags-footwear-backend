@@ -17,7 +17,7 @@ router.get('/products', getAllProducts);
 // Route to create  prodduct 
 router.post('/products', createProduct);
 //  upload product Image 
-router.post('/products/:id', productImageUpload.single("productImage"), uploadProductImage);
+router.post('/products/:Id', productImageUpload.single("productImage"), uploadProductImage);
 
 
 // Route to get a single product by ID

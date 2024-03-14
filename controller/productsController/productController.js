@@ -72,8 +72,8 @@ const uploadProductImage = async (req, res) => {
       const imageUrl = req.protocol + '://' + req.get('host') + '/' + req.file.path;
 //   console.log(imageUrl)
       // Update product with image URL
-      const productId = req.params.productId;
-      const product = await Product.findByIdAndUpdate(productId, { productImage: imageUrl }, { new: true });
+      const productId = req.params.Id;
+      const product = await Product.findByIdAndUpdate(Id, { productImage: imageUrl }, { new: true });
   
       // Return updated product
       res.status(200).json({ message: 'Image uploaded successfully', product: product });
