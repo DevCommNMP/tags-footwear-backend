@@ -82,12 +82,31 @@ const uploadProductImage = async (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
     }
   };
-
+  const uploadproductSubImages = async (req, res) => {
+    try {
+      if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ message: 'No image uploaded' });
+      }
+      const productImages = req.files.map(file => req.protocol + '://' + req.get('host') + '/assets/images/productsubImages/' + file.filename); // Construct the image URLs
+      console.log(productImages)
+      const productId = req.params.Id;
+      const product = await Product.findByIdAndUpdate(productId, { productSubImages: productImages }, { new: true });
+      if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+      res.status(200).json({ message: 'Images uploaded successfully', product: product });
+    } catch (error) {
+      console.error('Error uploading images:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+  
 module.exports = {
     getProductById,
     createProduct,
     updateProduct,
     deleteProduct,
     getAllProducts,
-    uploadProductImage
+    uploadProductImage,
+    uploadproductSubImages
 };

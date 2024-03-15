@@ -6,9 +6,11 @@ const {getAllProducts,getProductById,
     createProduct,
     updateProduct,
     uploadProductImage,
-    deleteProduct,} = require('../../controller/productsController/productController');
+    deleteProduct,uploadproductSubImages} = require('../../controller/productsController/productController');
 
     const productImageUpload=require('../../config/multerConfig/productImageUpload')
+    const uploadSubImages=require('../../config/multerConfig/productSubimagesUplaod')
+    
     // .post(productImage.single('productImage'),createProduct)
    //   .post(upload.array('photos', 5), productController.addProduct)
 
@@ -19,6 +21,8 @@ router.post('/products', createProduct);
 //  upload product Image 
 router.post('/products/:Id', productImageUpload.single("productImage"), uploadProductImage);
 
+//  upload product Image 
+router.post('/products/subImages/:Id', uploadSubImages.array("productSubImages"), uploadproductSubImages);
 
 // Route to get a single product by ID
 router.get('/products/:Id', getProductById);

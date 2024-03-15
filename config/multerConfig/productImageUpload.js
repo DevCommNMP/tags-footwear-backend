@@ -13,7 +13,7 @@ const storage = multer.diskStorage(
     cb(null, Date.now() + '-' + file.originalname);
   }
 });
-console.log("uploading images")
+// console.log("uploading images")
 // Set file filter
 const fileFilter = (req, file, cb) => {
   // Accept only specific file types
