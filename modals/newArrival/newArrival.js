@@ -41,6 +41,12 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  tag:{
+    type:String,
+    required:true
+      },
+
+
   sizesAvailable: [String],
   colorsAvailable: [String],
   productSubImages: [String],
@@ -63,11 +69,6 @@ const productSchema = new mongoose.Schema({
     ref:"subCategoryType",
     required:true,
   },
-  tag:{
-    type:String,
-    required:true
-      },
-
   rating: Number,
   reviews: [{
     userId: {

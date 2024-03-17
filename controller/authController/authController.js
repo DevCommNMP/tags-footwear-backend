@@ -20,6 +20,7 @@ const registerUser = expressAsyncHandler(async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
     }
 
+    // console.log(req.body)
     const user = await User.create({
       username: req?.body?.username,
       email: req?.body?.email,
@@ -36,20 +37,21 @@ const login = expressAsyncHandler(async (req, res) => {
   try {
     const { password } = req.body;
     const userFound = await User.findOne({ email: req?.body?.email });
-   const token= generateToken(userFound._id);
     if (!userFound) {
       return res.status(401).json({ message: "Invalid Email" });
     }
+   const token= generateToken(userFound._id);
+   
 
     if (userFound && (await userFound.isPasswordMatched(password))) {
       res.cookie('token', token, { httpOnly: true }).json({
-        id: userFound?._id,
+        // id: userFound?._id,
         email: userFound?.email,
-        firstName: userFound?.firstName,
+        userName: userFound?.username,
         lastName: userFound?.lastName,
         profileImage: userFound?.profilePhoto,
         isAdmin: userFound?.isAdmin,
-        token: token
+        token: token,
       });
 
       res.status(200).json({ token }); // Send the token in the response body

@@ -1,5 +1,6 @@
 // controllers/PremiumLeatherController.js
 const PremiumLeather = require('../../modals/premiumLeather/premiumLeather');
+const product = require('../../modals/product/product');
 
 // GET all premium leather shoes
 const getAllPremiumLeathers = async (req, res) => {
@@ -44,8 +45,10 @@ const createPremiumLeather = async (req, res) => {
     createdAt: req.body.createdAt,
     modifiedAt: req.body.modifiedAt
   });
+  const newproduct=new product(req?.body)
 
   try {
+    await newproduct.save();  
     const newShoe = await shoe.save();
     res.status(201).json(newShoe);
   } catch (err) {

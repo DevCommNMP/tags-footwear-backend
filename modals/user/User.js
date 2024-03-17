@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
         // required: [true, 'Last name is required'],
         type: String,
     },
+ 
     // Gender of the user (optional)
     gender: {
         type: String,

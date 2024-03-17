@@ -13,7 +13,7 @@ const {  getAllPremiumLeathers,
 router.get('/premiumLeather',getAllPremiumLeathers);
 
 // GET a single premium leather shoe
-router.get('/premiumLeather/:id',getPremiumLeatherById);
+// router.get('/premiumLeather/:id',getPremiumLeatherShoeById);
 
 // // Create a new premium leather shoe
 router.post('/premiumLeather/', createPremiumLeather);

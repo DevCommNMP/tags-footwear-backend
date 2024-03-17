@@ -33,7 +33,7 @@ const premiumLeatherShoeSchema = new mongoose.Schema({
       required: true
     },
     price: {
-      type: Number,
+      type: Number, 
       required: true
     },
     sizesAvailable: [String],
@@ -43,6 +43,11 @@ const premiumLeatherShoeSchema = new mongoose.Schema({
       type: Number,
       required: true
     },
+     tag:{
+    type:String,
+    required:true
+      },
+
     rating: Number,
     reviews: [{
       userId: {
