@@ -46,7 +46,8 @@ const categoriesRoute=require('./routes/catogriesRoutes/mainCategoriesRoute/main
 const premiumLeather=require('./routes/premiumLeatherRoutes/premiumLeatherRoutes')
 const subCategories=require('./routes/catogriesRoutes/mainCategoriesRoute/subCategoriesRoutes')
 const subCategoriesType=require('./routes/catogriesRoutes/mainCategoriesRoute/subCategoryTypeRoutes')
-const wishlist=require('./routes/wishlist/wishlist')
+const wishlist=require('./routes/wishlist/wishlist');
+const cart=require('./routes/cartRoutes/cartRoutes')
 app.use('/assets/images/productImages', express.static(path.join(__dirname, 'assets/images/productImages')));
 app.use('/assets/images/productSubImages', express.static(path.join(__dirname, 'assets/images/productSubImages')));
 
@@ -57,6 +58,7 @@ app.use('/api',categoriesRoute);
 app.use('/api',premiumLeather);
 app.use('/api',subCategories)
 app.use('/api',wishlist)
+app.use('/api',cart);
 app.use('/api',subCategoriesType)
 
 //allowing server to use port dynamically 
