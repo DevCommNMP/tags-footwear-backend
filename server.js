@@ -15,7 +15,7 @@ const dbConnect = require('./database/connectDB');
 const seedData=require('./seed')
 // Define CORS middleware configuration
 // Define an array of allowed origins
-const allowedOrigins = ['http://localhost:5173','https://wonderful-clafoutis-70951b.netlify.app'];
+const allowedOrigins = ['http://localhost:5173','https://tags-website-frontend-bmkupqtki-nmps-projects.vercel.app/'];
 
 // Define CORS middleware configuration
 const corsOptions = {
@@ -46,6 +46,7 @@ const categoriesRoute=require('./routes/catogriesRoutes/mainCategoriesRoute/main
 const premiumLeather=require('./routes/premiumLeatherRoutes/premiumLeatherRoutes')
 const subCategories=require('./routes/catogriesRoutes/mainCategoriesRoute/subCategoriesRoutes')
 const subCategoriesType=require('./routes/catogriesRoutes/mainCategoriesRoute/subCategoryTypeRoutes')
+const wishlist=require('./routes/wishlist/wishlist')
 app.use('/assets/images/productImages', express.static(path.join(__dirname, 'assets/images/productImages')));
 app.use('/assets/images/productSubImages', express.static(path.join(__dirname, 'assets/images/productSubImages')));
 
@@ -55,6 +56,7 @@ app.use('/api',reviewroutes);
 app.use('/api',categoriesRoute);
 app.use('/api',premiumLeather);
 app.use('/api',subCategories)
+app.use('/api',wishlist)
 app.use('/api',subCategoriesType)
 
 //allowing server to use port dynamically 

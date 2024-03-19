@@ -58,6 +58,14 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    cart: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product" // Reference to the "product" model
+      }],
+      wishlist:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product"
+      }],
     // Token for account verification
     accountVerificationToken: {
         type: String,

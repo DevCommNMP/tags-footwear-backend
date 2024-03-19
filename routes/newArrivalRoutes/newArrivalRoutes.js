@@ -16,7 +16,7 @@ router.get('/premiumLeather',getAllPremiumLeathers);
 // router.get('/premiumLeather/:id',getPremiumLeatherShoeById);
 
 // // Create a new premium leather shoe
-router.post('/premiumLeather/', createPremiumLeather);
+router.post('/premiumLeather', createPremiumLeather);
 
 // // Update a premium leather shoe
 // router.put('/premiumLeather/:id',updatePremiumLeatherShoe);

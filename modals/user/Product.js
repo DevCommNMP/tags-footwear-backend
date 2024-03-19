@@ -52,6 +52,7 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    
     // Assuming you want to keep track of the date the product was added to the database
     createdAt: {
         type: Date,
