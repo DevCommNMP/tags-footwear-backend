@@ -15,7 +15,7 @@ const dbConnect = require('./database/connectDB');
 const seedData=require('./seed')
 // Define CORS middleware configuration
 // Define an array of allowed origins
-const allowedOrigins = ['http://localhost:5173','https://tags-website-frontend-bmkupqtki-nmps-projects.vercel.app/'];
+const allowedOrigins = ['http://localhost:5173', 'https://wonderful-clafoutis-70951b.netlify.app','https://tags-website-frontend-bmkupqtki-nmps-projects.vercel.app/'];
 
 // Define CORS middleware configuration
 const corsOptions = {
