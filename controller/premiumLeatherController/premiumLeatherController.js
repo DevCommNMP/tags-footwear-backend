@@ -1,6 +1,6 @@
 // controllers/PremiumLeatherController.js
 const PremiumLeather = require('../../modals/premiumLeather/premiumLeather');
-const product = require('../../modals/product/product');
+const Product = require('../../modals/product/product');
 
 // GET all premium leather shoes
 const getAllPremiumLeathers = async (req, res) => {
@@ -26,46 +26,24 @@ const getPremiumLeatherById = async (req, res) => {
 };// Create a new premium leather shoe
 const createPremiumLeather = async (req, res) => {
   console.log(req)
-  const shoe = new PremiumLeather({
-    productName: req.body.productName,
-    brand: req.body.brand,
-    category: req.body.category,
-    description: req.body.description,
-    gender: req.body.gender,
-    product: req.body.product,
-    occasion: req.body.occasion,
-    countryOfOrigin: req.body.countryOfOrigin,
-    price: req.body.price,
-    sizesAvailable: req.body.sizesAvailable,
-    colorsAvailable: req.body.colorsAvailable,
-    images: req.body.images,
-    stockQuantity: req.body.stockQuantity,
-    rating: req.body.rating,
-    reviews: req.body.reviews,
-    createdAt: req.body.createdAt,
-    modifiedAt: req.body.modifiedAt
-  });
-  const newproduct=new product(req?.body)
-
+  const premiumProduct = new PremiumLeather(req.body)
+   const newProduct=new Product(req.body)
   try {
-    await newproduct.save();  
-    const newShoe = await shoe.save();
-    res.status(201).json(newShoe);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
+
+    
+      await premiumProduct.save();  
+      await newProduct.save();
+      res.status(201).json(premiumProduct);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+
 };
 
 // Update a premium leather shoe
-const updatePremiumLeather = async (req, res) => {
+const updatePremiumLeatherById = async (req, res) => {
   try {
-    const allowedUpdates = ['name', 'description', 'price', 'colorsAvailable', 'brand', 'sizesAvailable'];
-    const updates = Object.keys(req.body);
-    const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
-
-    if (!isValidOperation) {
-      return res.status(400).json({ message: 'Invalid updates' });
-    }
+   
 
     const updatedShoe = await PremiumLeather.findByIdAndUpdate(req.params.id, req.body, { new: true });
 
@@ -80,7 +58,7 @@ const updatePremiumLeather = async (req, res) => {
 };
 
 // Delete a premium leather shoe
-const deletePremiumLeather = async (req, res) => {
+const deletePremiumLeatherById = async (req, res) => {
   try {
     const deletedShoe = await PremiumLeather.findByIdAndDelete(req.params.id);
     if (!deletedShoe) {
@@ -94,8 +72,8 @@ const deletePremiumLeather = async (req, res) => {
 
 module.exports = {
   getAllPremiumLeathers,
-  deletePremiumLeather,
-  updatePremiumLeather,
+  deletePremiumLeatherById,
+  updatePremiumLeatherById,
   createPremiumLeather,
   getPremiumLeatherById
 };

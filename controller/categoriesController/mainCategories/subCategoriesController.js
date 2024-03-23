@@ -1,11 +1,12 @@
-const subCategory = require("../../../modals/category/subCategories");
+const SubCategoriesType = require('../../../modals/category/subCategorytype'); // Adjust the path as needed
+  
 
 
 
 // Controller function to get all categories
 const getAllSubCategories = async (req, res) => {
   try {
-    const categories = await subCategory.find();
+    const categories = await SubCategoriesType.find();
     res.status(200).json(categories);
   } catch (error) {
     console.error('Error getting categories:', error);

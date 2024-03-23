@@ -14,7 +14,7 @@ const   createCart = async (req, res) => {
 // Get all carts
 const  getAllCarts = async (req, res) => {
   try {
-    const carts = await Cart.find();
+    const carts = await Cart.find().populate('products');
     res.json(carts);
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -1,28 +1,32 @@
-const subCategoryType = require("../../../modals/category/subCategorytype");
-
+const subCategoriesTypes=require('../../../modals/category/subCategorytype')
+const categories=require('../../../modals/category/subCategories')
 
 
 // Controller function to get all categories
 const getAllSubCategoriesTypes = async (req, res) => {
+
   try {
-    const categories = await subCategoryType.find();
-    res.status(200).json(categories);
+    const subCategoryTypes = await subCategoriesTypes.find(); // Use the correct model
+    res.status(200).json(subCategoryTypes);
   } catch (error) {
-    console.error('Error getting categories:', error);
+    console.error('Error getting subcategory types:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
+
 
 // Controller function to get a single subCategory by ID
 const getsubCategoryTypesById = async (req, res) => {
   console.log(req.params.Id);
   try {
-    const subcategory = await subCategoryType.findById(req.params.Id);
+    const subcategoryType = await subCategoriesTypes.findById(req.params.Id);
   
-    if (!subcategory) {
+    if (!subcategoryType) {
       return res.status(404).json({ error: 'Sub-Type not found' });
     }
-    res.status(200).json(subcategory);
+    res.status(200).json(subcategoryType);
   } catch (error) {
     console.error('Error getting sub-type by ID:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -33,12 +37,12 @@ const getsubCategoryTypesById = async (req, res) => {
 const createsubCategoryTypes = async (req, res) => {
   try {
     const { subcategoryTypeName, icon, color } = req.body;
-    const hasSubCategory=await subCategoryType.findOne({subcategoryTypeName});
+    const hasSubCategory=await subCategoriesTypes.findOne({subcategoryTypeName});
     if(hasSubCategory){
       res.status(201).json({message:"Sub-type Should be unique"})
-      // return;                 
+      return;                 
     }
-    const newsubCategory = new subCategoryType({ subcategoryTypeName, icon, color });
+    const newsubCategory = new subCategoriesTypes({ subcategoryTypeName, icon, color });
     const savedsubCategory = await newsubCategory.save();
     res.status(201).json(savedsubCategory);
   } catch (error) {
@@ -50,7 +54,7 @@ const createsubCategoryTypes = async (req, res) => {
 // Controller function to update a subCategory by ID
 const updatesubCategoryType = async (req, res) => {
   try {
-    const updatedsubCategory = await subCategoryType.findByIdAndUpdate(
+    const updatedsubCategory = await subCategoriesTypes.findByIdAndUpdate(
       req.params.Id,
       req.body,
       { new: true }
@@ -68,7 +72,7 @@ const updatesubCategoryType = async (req, res) => {
 // Controller function to delete a subCategory by ID
 const deletesubCategoryType = async (req, res) => {
   try {
-    const deletedsubCategory = await subCategoryType.findByIdAndDelete(req.params.Id);
+    const deletedsubCategory = await subCategoriesTypes.findByIdAndDelete(req.params.Id);
     if (!deletedsubCategory) {
       return res.status(404).json({ error: 'Sub-type not found' });
     }
@@ -80,7 +84,7 @@ const deletesubCategoryType = async (req, res) => {
 };
 
 module.exports = {
-    getAllSubCategoriesTypes,
+  getAllSubCategoriesTypes,
   getsubCategoryTypesById,
   createsubCategoryTypes,
   updatesubCategoryType,

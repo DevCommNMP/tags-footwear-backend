@@ -3,7 +3,7 @@ const Product = require('../../modals/product/product');
 // Get all products
 const getAllProducts = async (req, res) => {
     try {
-        const products = await Product.find();
+        const products = await Product.find().populate('category subcategory subcategoryType');
         res.json(products);
     } catch (error) {
         res.status(500).json({ message: error.message });

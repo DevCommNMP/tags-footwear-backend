@@ -7,13 +7,16 @@ const { getAllSubCategoriesTypes,
     deletesubCategoryType} = require('../../../controller/categoriesController/mainCategories/subCategoriesType')
 
 // Route to create a new category
+router.get('/subCategoriesType', getAllSubCategoriesTypes);
 router.post('/subCategoriesType', createsubCategoryTypes);
 
-// Route to get all categories
-router.get('/subCategoriesType', getAllSubCategoriesTypes);
-
-// Route to get a category by ID
 router.get('/subCategoriesType/:Id', getsubCategoryTypesById);
+// Route to get a category by ID
+
+
+
+// Route to get all categories
+
 
 // Route to update a category by ID
 router.put('/subCategoriesType/:Id', updatesubCategoryType);

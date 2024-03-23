@@ -1,22 +1,18 @@
 const express = require('express');
 const router = express.Router();
+const {authMiddleware} =require('../../middleware/isAuthenticated/isAuthenticated')
+const { registerUser, login, isAuthenticated } = require('../../controller/authController/authController');
 
-const {registerUser,
-       login,
-      }=require('../../controller/authController/authController');
-
- /*------------------------register routes--------------------------------*/
-//registering user
-router.route('/auth/register')
-.post(registerUser);
-
+/*------------------------register routes--------------------------------*/
+// Registering user
+router.post('/register', registerUser);
 
 /*------------------------login routes--------------------------------*/
-//user login route
-router.route('/auth/login')
-.post(login);
-//getting all users
- 
+// User login route
+router.post('/login', login);
 
+/*------------------------isAuthenticated route--------------------------------*/
+// Check if user is authenticated
+router.get('/isAuthenticated',authMiddleware, isAuthenticated);
 
-module.exports=router;
+module.exports = router;

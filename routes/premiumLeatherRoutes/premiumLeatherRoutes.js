@@ -4,8 +4,8 @@ const multer=require('multer')
 const router = express.Router();
 const upload = multer();
 const {  getAllPremiumLeathers,
-    deletePremiumLeather,
-    updatePremiumLeather,
+    deletePremiumLeatherById,
+    updatePremiumLeatherById,
     createPremiumLeather,
     getPremiumLeatherById} = require('../../controller/premiumLeatherController/premiumLeatherController');
 
@@ -19,9 +19,9 @@ router.get('/premiumLeather/:id',getPremiumLeatherById);
 router.post('/premiumLeather/', createPremiumLeather);
 
 // // Update a premium leather shoe
-// router.put('/premiumLeather/:id',updatePremiumLeatherShoe);
+router.put('/premiumLeather/:id',updatePremiumLeatherById);
 
 // // Delete a premium leather shoe
-// router.delete('/premiumLeather/:id',deletePremiumLeatherShoe);
+router.delete('/premiumLeather/:id',deletePremiumLeatherById);
 
 module.exports = router;
