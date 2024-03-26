@@ -1,12 +1,13 @@
-const SubCategoriesType = require('../../../modals/category/subCategorytype'); // Adjust the path as needed
+const SubCategories = require('../../../modals/category/subCategories'); // Adjust the path as needed
   
 
 
 
 // Controller function to get all categories
 const getAllSubCategories = async (req, res) => {
+  console.log("updating the data")
   try {
-    const categories = await SubCategoriesType.find();
+    const categories = await SubCategories.find();
     res.status(200).json(categories);
   } catch (error) {
     console.error('Error getting categories:', error);
@@ -18,7 +19,7 @@ const getAllSubCategories = async (req, res) => {
 const getsubCategoryById = async (req, res) => {
   console.log(req.params.Id);
   try {
-    const subcategory = await subCategory.findById(req.params.Id);
+    const subcategory = await SubCategories.findById(req.params.Id);
   
     if (!subcategory) {
       return res.status(404).json({ error: 'subCategory not found' });
@@ -34,12 +35,12 @@ const getsubCategoryById = async (req, res) => {
 const createsubCategory = async (req, res) => {
   try {
     const { subcategoriesName, icon, color } = req.body;
-    const hasSubCategory=await subCategory.findOne({subcategoriesName});
+    const hasSubCategory=await SubCategories.findOne({subcategoriesName});
     if(hasSubCategory){
       res.status(201).json({message:"SubCategory Should be unique"})
       // return;                 
     }
-    const newsubCategory = new subCategory({ subcategoriesName, icon, color });
+    const newsubCategory = new SubCategories({ subcategoriesName, icon, color });
     const savedsubCategory = await newsubCategory.save();
     res.status(201).json(savedsubCategory);
   } catch (error) {
@@ -51,7 +52,7 @@ const createsubCategory = async (req, res) => {
 // Controller function to update a subCategory by ID
 const updatesubCategory = async (req, res) => {
   try {
-    const updatedsubCategory = await subCategory.findByIdAndUpdate(
+    const updatedsubCategory = await SubCategories.findByIdAndUpdate(
       req.params.Id,
       req.body,
       { new: true }
@@ -69,7 +70,7 @@ const updatesubCategory = async (req, res) => {
 // Controller function to delete a subCategory by ID
 const deletesubCategory = async (req, res) => {
   try {
-    const deletedsubCategory = await subCategory.findByIdAndDelete(req.params.Id);
+    const deletedsubCategory = await SubCategories.findByIdAndDelete(req.params.Id);
     if (!deletedsubCategory) {
       return res.status(404).json({ error: 'subCategory not found' });
     }

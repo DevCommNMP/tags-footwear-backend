@@ -35,7 +35,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Use the CORS middleware with the specified options
 app.use(cors(corsOptions));
-
+app.use(express.static('public'));
 dbConnect()
 seedData();
 // Define the port number to listen on, using the environment variable PORT or default to 5000

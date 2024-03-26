@@ -8,7 +8,7 @@ const subcategoriesSchema = new mongoose.Schema({
 
    
   },
-  icon: String,
+  Image: String,
   color: String
 });
 

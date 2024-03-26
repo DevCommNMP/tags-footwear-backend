@@ -1,14 +1,17 @@
 const Cart = require('../../modals/cart/cart');
+const User = require('../../modals/user/User');
 
 // Create a new cart
 const   createCart = async (req, res) => {
-  try {
-    const { userId, products } = req.body;
-    const cart = await Cart.create({ userId, products });
-    res.status(201).json(cart);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+
+  // try {
+  //   const user=await User.findById()
+  //   const { userId, productId } = req.body;
+  //   const cart = await Cart.create({ userId, productId });
+  //   res.status(201).json(cart);
+  // } catch (error) {
+  //   res.status(500).json({ message: error.message });
+  // }
 };
 
 // Get all carts

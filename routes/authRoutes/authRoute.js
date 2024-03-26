@@ -5,11 +5,11 @@ const { registerUser, login, isAuthenticated } = require('../../controller/authC
 
 /*------------------------register routes--------------------------------*/
 // Registering user
-router.post('/register', registerUser);
+router.post('/auth/register', registerUser);
 
 /*------------------------login routes--------------------------------*/
 // User login route
-router.post('/login', login);
+router.post('/auth/login', login);
 
 /*------------------------isAuthenticated route--------------------------------*/
 // Check if user is authenticated
