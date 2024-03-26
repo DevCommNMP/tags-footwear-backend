@@ -84,7 +84,9 @@ const uploadProductImage = async (req, res) => {
     }
   };
   const uploadproductSubImages = async (req, res) => {
+    console.log("hello")
     try {
+        console.log(req.files);
       if (!req.files || req.files.length === 0) {
         return res.status(400).json({ message: 'No image uploaded' });
       }

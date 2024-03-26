@@ -49,7 +49,7 @@ const subCategoriesType=require('./routes/catogriesRoutes/mainCategoriesRoute/su
 const wishlist=require('./routes/wishlist/wishlist');
 const cart=require('./routes/cartRoutes/cartRoutes')
 app.use('/assets/images/productImages', express.static(path.join(__dirname, 'assets/images/productImages')));
-app.use('/assets/images/productSubImages', express.static(path.join(__dirname, 'assets/images/productSubImages')));
+app.use('/assets/images/productsubImages', express.static(path.join(__dirname, 'assets/images/productsubImages')));
 
 app.use('/api',authRoute);
 app.use('/api',productsRoute);
