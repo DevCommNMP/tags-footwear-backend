@@ -16,7 +16,7 @@ const registerUser = expressAsyncHandler(async (req, res) => {
     }
     const user = await User.create({ email, username, password });
     const token = await generateToken(user._id);
-    const BASE_URL=`${process.env.BASE_URL}/verify-email`;
+    const BASE_URL=`${process.env.BASE_URL}/verify-account/${token}`;
     
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -1399,28 +1399,41 @@ const isAuthenticated = (req, res) => {
   return;
   // You can implement your authentication logic here
 };
+const verifyAccount = async (req, res) => {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) {
+    return res.status(401).json({ error: 'Authorization header missing' });
+  }
+  const token = authHeader.split(' ')[1];
 
-const verifyAccount = async(req, res) => {
-  const {token}=req.params
-const verifyToken=await jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
- 
-    if (err) {
-      // Token is invalid or expired
-      res.send(err)
-    } else {
-      // Token is valid, decoded contains the decoded payload
-      console.log('Decoded payload:', decoded);
-      console.log((decoded.id))
-      const user = User.findByIdAndUpdate(decoded.id, {
-        isAccountVerified: true,
-      });
-      console.log(user)
-      res.status(200).json(user.isAccountVerified)
+  try {
+    const decoded = await jwt.verify(token, process.env.JWT_KEY);
+    console.log('Decoded payload:', decoded);
+    console.log(decoded.id);
+
+    const user = await User.findByIdAndUpdate(decoded.id, {
+      isAccountVerified: true,
+    });
+
+    console.log(user);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
     }
-  })
-  res.redirect(`${process.env.BASE_URL}/verify-account`);
-  // You can implement your authentication logic here
-}; 
+
+    res.status(200).json({ isAccountVerified: true });
+  } catch (err) {
+    // Token is invalid or expired
+    console.error(err);
+    res.status(401).json({ error: 'Invalid or expired token' });
+  }
+  
+  // After verifying the account, redirect the user
+  // res.redirect(`${process.env.BASE_URL}/verify-account`);
+  // Note: You can't redirect a client from an API endpoint. Redirects are typically done from browser-side or through client-side frameworks like React.
+};
+
+module.exports = verifyAccount;
 
 module.exports = {
   registerUser,

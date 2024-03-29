@@ -18,7 +18,7 @@ const seedData=require('./seed')
 const allowedOrigins = [
     'http://localhost:5173',
     'https://tags-website-frontend.vercel.app',
-    'https://mail.google.com'
+    
 ];
 
 // Define CORS middleware configuration

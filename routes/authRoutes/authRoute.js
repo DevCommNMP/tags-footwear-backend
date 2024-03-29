@@ -10,8 +10,8 @@ router.post('/auth/register', registerUser);
 /*------------------------login routes--------------------------------*/
 // User login route
 router.post('/auth/login', login);
-router.post('/email', sendmail);
-router.post('/verify/:token', verifyAccount);
+router.post('/verify-account', verifyAccount);
+
 /*------------------------isAuthenticated route--------------------------------*/
 // Check if user is authenticated
 router.get('/isAuthenticated',authMiddleware, isAuthenticated);
