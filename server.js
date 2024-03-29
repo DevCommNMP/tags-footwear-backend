@@ -15,7 +15,11 @@ const dbConnect = require('./database/connectDB');
 const seedData=require('./seed')
 // Define CORS middleware configuration
 // Define an array of allowed origins
-const allowedOrigins = ['http://localhost:5173', 'https://tags-website-frontend.vercel.app'];
+const allowedOrigins = [
+    'http://localhost:5173',
+    'https://tags-website-frontend.vercel.app',
+    'https://mail.google.com'
+];
 
 // Define CORS middleware configuration
 const corsOptions = {
@@ -24,6 +28,7 @@ const corsOptions = {
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
+            console.log(callback)
             callback(new Error('Access denied'));
         }
     },

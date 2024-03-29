@@ -74,6 +74,14 @@ const userSchema = new mongoose.Schema({
     accountVerificationTokenExpires: {
         type: Date,
     },
+     // Token for account verification
+     forgotPasswordVerificationToken: {
+        type: String,
+    },
+    // Expiration time for account verification token
+    forgotPasswordVerificationTokenExpires: {
+        type: Date,
+    },
     // Timestamp for account creation
     accountCreated: {
         type: Date,
