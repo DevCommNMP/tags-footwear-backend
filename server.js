@@ -17,6 +17,7 @@ const seedData=require('./seed')
 // Define an array of allowed origins
 const allowedOrigins = [
     'http://localhost:5173',
+    'http://localhost:5174',
     'https://tags-website-frontend.vercel.app',
     
 ];
@@ -53,6 +54,7 @@ const subCategories=require('./routes/catogriesRoutes/mainCategoriesRoute/subCat
 const subCategoriesType=require('./routes/catogriesRoutes/mainCategoriesRoute/subCategoryTypeRoutes')
 const wishlist=require('./routes/wishlist/wishlist');
 const cart=require('./routes/cartRoutes/cartRoutes')
+const checkout=require('./routes/checkoutRoutes/checkoutRoutes')
 app.use('/assets/images/productImages', express.static(path.join(__dirname, 'assets/images/productImages')));
 app.use('/assets/images/productsubImages', express.static(path.join(__dirname, 'assets/images/productsubImages')));
 
@@ -64,6 +66,7 @@ app.use('/api',premiumLeather);
 app.use('/api',subCategories)
 app.use('/api',wishlist)
 // app.use('/api',cart);
+app.use('/api',checkout);
 app.use('/api',subCategoriesType)
 
 //allowing server to use port dynamically 
