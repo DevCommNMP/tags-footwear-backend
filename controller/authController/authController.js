@@ -1332,10 +1332,7 @@ const registerUser = expressAsyncHandler(async (req, res) => {
       </html>`, // HTML body
     };
 
-    // Call sendMail function
-
-    const expiryDate = new Date(); // Get current date and time
-    expiryDate.setTime(expiryDate.getTime() + 10 * 60 * 1000); // Add 10 minutes in milliseconds
+    // Call sendMaij- me() + 10 * 60 * 1000); // Add 10 minutes in milliseconds
 
     const updateUser = User.findByIdAndUpdate(user._id, {
       accountVerificationToken: token,
