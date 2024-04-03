@@ -65,7 +65,7 @@ app.use('/api',categoriesRoute);
 app.use('/api',premiumLeather);
 app.use('/api',subCategories)
 app.use('/api',wishlist)
-// app.use('/api',cart);
+app.use('/api',cart);  
 app.use('/api',checkout);
 app.use('/api',subCategoriesType)
 
