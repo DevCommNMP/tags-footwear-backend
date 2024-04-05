@@ -54,7 +54,8 @@ const subCategories=require('./routes/catogriesRoutes/mainCategoriesRoute/subCat
 const subCategoriesType=require('./routes/catogriesRoutes/mainCategoriesRoute/subCategoryTypeRoutes')
 const wishlist=require('./routes/wishlist/wishlist');
 const cart=require('./routes/cartRoutes/cartRoutes')
-const checkout=require('./routes/checkoutRoutes/checkoutRoutes')
+const checkout=require('./routes/checkoutRoutes/checkoutRoutes');
+const userRoutes=require('./routes/user/userRoutes')
 app.use('/assets/images/productImages', express.static(path.join(__dirname, 'assets/images/productImages')));
 app.use('/assets/images/productsubImages', express.static(path.join(__dirname, 'assets/images/productsubImages')));
 
@@ -68,6 +69,7 @@ app.use('/api',wishlist)
 app.use('/api',cart);  
 app.use('/api',checkout);
 app.use('/api',subCategoriesType)
+app.use('/api',userRoutes)
 
 //allowing server to use port dynamically 
 const PORT = process.env.PORT || 5000;

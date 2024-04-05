@@ -15,6 +15,7 @@ const productSchema = new mongoose.Schema({
   },
   brand: {
     type: String,
+    default:"Tags",
   },
   
   sizesAvailable: [{
@@ -31,6 +32,7 @@ const productSchema = new mongoose.Schema({
   colorsAvailable: [
     {
       type: String,
+      required:true
     },
   ],
   description: {
@@ -42,13 +44,10 @@ const productSchema = new mongoose.Schema({
     // required: true
   },
 
-  occasion: {
-    type: String,
-    required: true,
-  },
+
   countryOfOrigin: {
     type: String,
-    required: true,
+    // required: true,
   },
   reviews: [
     {
@@ -74,7 +73,7 @@ const productSchema = new mongoose.Schema({
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category", // Make sure to use the correct model name
-    required: true,
+    // required: true,
   },
   subcategory: {
     type: mongoose.Schema.Types.ObjectId,
@@ -88,7 +87,7 @@ const productSchema = new mongoose.Schema({
   },
   tag: {
     type: String,
-    required: true,
+    // required: true,
   },
 
   rating: Number,

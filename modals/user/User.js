@@ -66,6 +66,11 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product"
       }],
+
+      order:[{
+type: mongoose.Schema.Types.ObjectId,
+        ref: "Order" 
+      }],
     // Token for account verification
     accountVerificationToken: {
         type: String,

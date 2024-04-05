@@ -24,33 +24,45 @@ console.log(formData)
         currency:"INR",
     }
     const order=await instance.orders.create(options);
-    console.log(order);
+    // console.log(order);
     res.status(200).json({success:true,order})
 
     const user=await User.findOne({email:req.body.userEmail});
-    console.log(user)
+   
     const placedOrder=await Order.create({
        user:user.id,
         orderId:order.id,
+        
+        
     })
-    console.log(placedOrder)
-    // const orderdata = await OrderDetail.create({
-    //     orderId: placedOrder._id,
-    //     billingDetails: {
-    //       fname: formData.fname,
-    //       lname: formData.lname,
-    //       billing_address: formData.billing_address,
-    //       billing_address2: formData.billing_address2,
-    //       city: formData.city,
-    //       zipcode: formData.zipcode,
-    //       phone: formData.phone,
-    //       state: formData.state,
-    //       email: formData.email,
-    //       additionalInfo: formData.additionalInfo
-    //     }
-    //   });
+
+    
+    const products = req.body.cartdata.map(item => ({
+        product: item.productId,
+        quantity: item.quantity,
+        price: item.price
+      }));
+// console.log("user",user)
+//     console.log("placedOrder",placedOrder);
+    const orderDetails = await OrderDetail.create({
+        orderId: placedOrder._id,
+        ptoductDetails:products,
+        billingDetails: {
+          fname: formData.fname,
+          lname: formData.lname,
+          billing_address: formData.billing_address,
+          billing_address2: formData.billing_address2,
+          city: formData.city,
+          zipcode: formData.zipcode,
+          phone: formData.phone,
+          state: formData.state,
+          email: formData.email,
+          additionalInfo: formData.additionalInfo
+        },
+        subtotal:req.body.amount,
+      });
       
-console.log(user);
+console.log(orderDetails);
   
 
 }
