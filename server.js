@@ -18,6 +18,7 @@ const seedData=require('./seed')
 const allowedOrigins = [
     'http://localhost:5173',
     'http://localhost:5174',
+    'https://mail.google.com',
     'https://tags-website-frontend.vercel.app',
     
 ];

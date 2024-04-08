@@ -27,11 +27,30 @@ const getProductById = async (req, res) => {
 
 // Controller function to create a product by ID
 const createProduct = async (req, res) => {
+    console.log(req.body)
     try {
-        const product = await Product.create(req.body);
+        const product = await Product.create({
+
+            
+            title: req.body.title,
+            productImage: "https://drive.google.com/file/d/1LSbvJ5NetEo-0b86Eo3Q8LeFIRHOAsSY/view?usp=sharing",
+            productName: req.body.skewId,
+            sizesAvailable: req.body.sizesAvailable,
+            price:req.body.price,  
+            colorsAvailable: req.body.colorsAvailable,
+            description:req.body.description,
+            productSubImages:"https://drive.google.com/file/d/1LSbvJ5NetEo-0b86Eo3Q8LeFIRHOAsSY/view?usp=sharing",
+            subcategory: req.body.category,
+            subcategoryType: req.body.footwearType,
+            tag: req.body.selectedTag,
+            rating: 4.7,
+            reviews: [],
+            SellingPrice: req.body.price,
+        });
         res.status(201).json(product);
     } catch (error) {
         res.status(500).json({ message: error.message });
+        console.log(error)
     }
 };
 
@@ -63,6 +82,7 @@ const deleteProduct = async (req, res) => {
     }
 };
 const uploadProductImage = async (req, res) => {
+    const {id,image}=req.body;
     try {
       // Check if file is uploaded
       if (!req.file) {
@@ -84,9 +104,9 @@ const uploadProductImage = async (req, res) => {
     }
   };
   const uploadproductSubImages = async (req, res) => {
-    console.log("hello")
+    // console.log("hello")
     try {
-        console.log(req.files);
+        // console.log(req.files);
       if (!req.files || req.files.length === 0) {
         return res.status(400).json({ message: 'No image uploaded' });
       }
