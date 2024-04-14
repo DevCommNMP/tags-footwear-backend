@@ -39,7 +39,7 @@ const createProduct = async (req, res) => {
             price:req.body.price,  
             colorsAvailable: req.body.colorsAvailable,
             description:req.body.description,
-            productSubImages:"https://drive.google.com/file/d/1LSbvJ5NetEo-0b86Eo3Q8LeFIRHOAsSY/view?usp=sharing",
+            // productSubImages:"https://drive.google.com/file/d/1LSbvJ5NetEo-0b86Eo3Q8LeFIRHOAsSY/view?usp=sharing",
             subcategory: req.body.category,
             subcategoryType: req.body.footwearType,
             tag: req.body.selectedTag,
@@ -56,17 +56,40 @@ const createProduct = async (req, res) => {
 
 // Controller function to update a product by ID
 const updateProduct = async (req, res) => {
-    const { Id } = req.params;
+    const { id } = req.params;
+    const { title, skewId, sizesAvailable, price, colorsAvailable, description, category, footwearType, selectedTag } = req.body;
+console.log(req.body)
     try {
-        const updatedProduct = await Product.findByIdAndUpdate(Id, req.body, { new: true });
+        const updatedProduct = await Product.findByIdAndUpdate(
+            id,
+            {
+                title,
+                productImage: "",
+                productName: skewId,
+                sizesAvailable,
+                price,
+                colorsAvailable,
+                description,
+                subcategory: category,
+                subcategoryType: footwearType,
+                tag: selectedTag,
+                rating: 4.7,
+                // reviews: [],
+                SellingPrice: price
+            },
+            { new: true }
+        );
+
         if (!updatedProduct) {
-            return res.status(404).json({ message: 'Product not found' });
+            return res.status(404).json({ message: 'Product not found', success: false });
         }
-        res.json(updatedProduct);
+
+        res.status(200).json({ updatedProduct, success: true });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message, success: false });
     }
 };
+
 
 // Controller function to delete a product by ID
 const deleteProduct = async (req, res) => {
@@ -74,11 +97,11 @@ const deleteProduct = async (req, res) => {
     try {
         const deletedProduct = await Product.findByIdAndDelete(Id);
         if (!deletedProduct) {
-            return res.status(404).json({ message: 'Product not found' });
+            return res.status(404).json({ message: 'Product not found',success:true});
         }
         res.json({ message: 'Product deleted successfully' });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message ,success:false});
     }
 };
 const uploadProductImage = async (req, res) => {
@@ -86,7 +109,7 @@ const uploadProductImage = async (req, res) => {
     try {
       // Check if file is uploaded
       if (!req.file) {
-        return res.status(400).json({ message: 'No image uploaded' });
+        return res.status(400).json({ message: 'No image uploaded',success:false });
       }
   
       // Construct image URL
@@ -97,10 +120,10 @@ const uploadProductImage = async (req, res) => {
       const product = await Product.findByIdAndUpdate(productId, { productImage: imageUrl }, { new: true });
   
       // Return updated product
-      res.status(200).json({ message: 'Image uploaded successfully', product: product });
+      res.status(200).json({ message: 'Image uploaded successfully', product: product,success:true });
     } catch (error) {
       console.error('Error uploading image:', error);
-      res.status(500).json({ message: 'Internal server error' });
+      res.status(500).json({ message: 'Internal server error',success:false });
     }
   };
   const uploadproductSubImages = async (req, res) => {
@@ -108,19 +131,19 @@ const uploadProductImage = async (req, res) => {
     try {
         // console.log(req.files);
       if (!req.files || req.files.length === 0) {
-        return res.status(400).json({ message: 'No image uploaded' });
+        return res.status(400).json({ message: 'No image uploaded',success:false });
       }
       const productImages = req.files.map(file => req.protocol + '://' + req.get('host') + '/assets/images/productsubImages/' + file.filename); // Construct the image URLs
       console.log(productImages)
       const productId = req.params.Id;
       const product = await Product.findByIdAndUpdate(productId, { productSubImages: productImages }, { new: true });
       if (!product) {
-        return res.status(404).json({ message: 'Product not found' });
+        return res.status(404).json({ message: 'Product not found',success:false  });
       }
-      res.status(200).json({ message: 'Images uploaded successfully', product: product });
+      res.status(200).json({ message: 'Images uploaded successfully', product: product ,success:true});
     } catch (error) {
       console.error('Error uploading images:', error);
-      res.status(500).json({ message: 'Internal server error' });
+      res.status(500).json({ message: 'Internal server error',success:false });
     }
   };
   
@@ -128,6 +151,26 @@ module.exports = {
     getProductById,
     createProduct,
     updateProduct,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     deleteProduct,
     getAllProducts,
     uploadProductImage,

@@ -3,6 +3,7 @@ const Razorpay=require('razorpay');
 const User = require('../../modals/user/User');
 const Order = require('../../modals/order/order');
 const OrderDetail = require('../../modals/orderDetails/orderDetail');
+var query = require('india-pincode-search');
 const instance = new Razorpay({
     key_id: process.env.RAZORPAY_API_KEY,
     key_secret: process.env.RAZORPAY_SECRET,
@@ -67,7 +68,16 @@ console.log(orderDetails);
 
 }
 
+
+const pincodeData=(req,res)=>{
+const{pincode}=req.body
+// res.json(pincode);
+const data= query.search(pincode);
+res.json(data);
+}
+
 module.exports={
     checkout,
-    getKeys
+    getKeys,
+    pincodeData
 }

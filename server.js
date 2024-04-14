@@ -21,7 +21,8 @@ const allowedOrigins = [
     'https://mail.google.com',
     'https://tags-footwear-admin.vercel.app',
     'https://tags-website-frontend.vercel.app',
-    
+    `http://103.169.86.3:5173`,
+`http://103.169.86.3:537`
 ];
 
 // Define CORS middleware configuration

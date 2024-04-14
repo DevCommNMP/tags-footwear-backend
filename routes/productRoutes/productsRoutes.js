@@ -28,7 +28,7 @@ router.post('/products/subImages/:Id', uploadSubImages.array("productSubImages")
 router.get('/products/:Id', getProductById);
 
 //Route to update a particular product
-router.put('/products/:Id', updateProduct);
+router.put('/products/:id', updateProduct);
 
 //Route to delete a particular post by Id
 router.delete('/products/:Id', deleteProduct);
