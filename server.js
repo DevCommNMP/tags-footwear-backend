@@ -22,7 +22,7 @@ const allowedOrigins = [
     'https://tags-footwear-admin.vercel.app',
     'https://tags-website-frontend.vercel.app',
     `http://103.169.86.3:5173`,
-`http://103.169.86.3:537`
+`http://103.169.86.3:5174`
 ];
 
 // Define CORS middleware configuration
