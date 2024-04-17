@@ -4,8 +4,9 @@ const mongoose = require('mongoose');
 
 const orderDetailSchema = new mongoose.Schema({
   orderId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Order',
+    // type: mongoose.Schema.Types.ObjectId,
+    // ref: 'Order',
+    type:String,
     required: true
   },
   ptoductDetails: [
@@ -23,7 +24,13 @@ const orderDetailSchema = new mongoose.Schema({
     type: Number,
       required: true
   },
+  size:{
+    type:"string"
+  },
 
+  color:{
+    type:"string"
+  }
   },
     
 ],

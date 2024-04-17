@@ -67,10 +67,10 @@ const userSchema = new mongoose.Schema({
         ref: "Product"
       }],
 
-      order:[{
-type: mongoose.Schema.Types.ObjectId,
+      order:{
+      type: mongoose.Schema.Types.ObjectId,
         ref: "Order" 
-      }],
+      },
     // Token for account verification
     accountVerificationToken: {
         type: String,
