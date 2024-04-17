@@ -27,6 +27,13 @@ const orderDetailSchema = new mongoose.Schema({
   },
     
 ],
+paymentId:{
+  type:String,
+
+},
+paymentSignature:{
+  type:String,
+},
 billingDetails: {
   fname: {
     type: String,

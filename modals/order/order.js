@@ -10,6 +10,7 @@ const orderSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  
   orderDate: {
     type: Date,
     default: Date.now
@@ -20,7 +21,7 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['Pending', 'Confirmed', 'Shipped', 'Delivered'],
+    enum: ['Pending', 'Confirmed', 'Shipped'  , 'Delivered'],
     default: 'Pending'
   },
  
