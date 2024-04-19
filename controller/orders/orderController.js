@@ -19,10 +19,12 @@ const getOrderById = async (req, res) => {
      try {
          const orderdata = await Order.findById(Id).populate('orderDetails');
          
+         const orderDetails=await OrderDetail.findOne({orderId:orderdata.orderId}).populate('productDetails.product')
+         console.log(orderDetails)
          if (!orderdata) {
              return res.status(404).json({ message: 'orderdata not found' });
          }
-         res.json(orderdata);
+         res.json(orderDetails);
      } catch (error) {
          res.status(500).json({ message: error.message });
      }
@@ -45,6 +47,7 @@ const getOrderDetialsById = async (req, res) => {
          if (!orderdata) {
              return res.status(404).json({ message: 'orderdata not found' });
          }
+         console.log(orderdata);
          res.json(orderdata);
      } catch (error) {
          res.status(500).json({ message: error.message });

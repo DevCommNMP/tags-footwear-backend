@@ -82,11 +82,12 @@ const checkout = async (req, res) => {
     { $set: { orderDetails: OrderDetaitlsData._id } },
     { new: true }
   );
-  const updateuserData=await User.findByIdAndUpdate({_id:user.id},{
-    orders:modifyOrderData._id
-  })
- 
-  console.log(updateuserData)
+  const updateUserData = await User.findOneAndUpdate(
+    { email: email }, // Assuming email is defined elsewhere in your code
+    { $push: { order: modifyOrderData._id } }, // Assuming you want to push the modified order _id to the user's orders array
+    { new: true }
+  );
+  console.log(updateUserData)
     res.status(200).json({ success: true, order });
   } catch (error) {
     res
@@ -150,7 +151,7 @@ const paymentVerification = async (req, res) => {
 
       // Redirect to payment success page
       res.redirect(
-        `http://localhost:3000/paymentsuccess?reference=${razorpay_payment_id}`
+        `${process.env.BASE_URL}/paymentsuccess?reference=${razorpay_payment_id}`
       );
     } catch (error) {
       const orderData = await Order.findOneAndUpdate(

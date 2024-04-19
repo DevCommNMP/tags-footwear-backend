@@ -20,8 +20,8 @@
     },
     orderStatus: {
       type: String,
-      enum: ['Pending', 'Confirmed', 'Shipped', 'Delivered'],
-      default: 'Pending'
+      enum: ['processing', 'Shipped', 'Delivered'],
+      default: 'processing'
     },
     PaymentStatus: {
       type: String,

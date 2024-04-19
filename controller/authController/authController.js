@@ -1385,6 +1385,9 @@ const login = expressAsyncHandler(async (req, res) => {
         profileImage: userFound.profilePhoto,
         isAdmin: userFound.isAdmin,
         token: token,
+        orders:userFound.order,
+        profilePhoto:userFound.profilePhoto
+
       });
     } else {
       return res.status(401).json({ message: "Invalid Password" });

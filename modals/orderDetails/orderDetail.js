@@ -9,7 +9,7 @@ const orderDetailSchema = new mongoose.Schema({
     type:String,
     required: true
   },
-  ptoductDetails: [
+  productDetails: [
    { 
     product: {
       type: mongoose.Schema.Types.ObjectId,
