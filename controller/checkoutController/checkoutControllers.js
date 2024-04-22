@@ -56,7 +56,7 @@ const checkout = async (req, res) => {
     //     console.log("placedOrdersdnfjknskjdfnkjsfkjnjdskfnjkfdsn",placedOrder);
     const orderDetails = await OrderDetail.create({
       orderId: placedOrder.orderId,
-      ptoductDetails: products,
+      productDetails: products,
       billingDetails: {
         fname: formData.fname,
         lname: formData.lname,
