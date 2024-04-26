@@ -69,6 +69,10 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  promotionalPrice: {
+    type: Number,
+    // required: true,
+  },
   productSubImages: [String],
   // default:"https://drive.google.com/file/d/1LSbvJ5NetEo-0b86Eo3Q8LeFIRHOAsSY/view?usp=sharing",
 
@@ -87,11 +91,14 @@ const productSchema = new mongoose.Schema({
     ref: "subCategoryType", // Make sure to use the correct model name
     required: true,
   },
+  isPremiumLeather:{
+type:Boolean,
+default:false
+  },
   tag: {
     type: String,
     // required: true,
   },
-
   rating: Number,
   reviews: [
     {

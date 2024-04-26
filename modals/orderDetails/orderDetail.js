@@ -16,6 +16,10 @@ const orderDetailSchema = new mongoose.Schema({
       ref: 'Product',
       required: true
   },
+  orderNumber:{
+    type:String,
+    unique:true,
+  },
   quantity: {
       type: Number,
       required: true
@@ -23,6 +27,15 @@ const orderDetailSchema = new mongoose.Schema({
   price:{
     type: Number,
       required: true
+  },
+  CGST:{
+    type:"string"
+  },
+  SGST:{
+    type:"string"
+  },
+  Tax:{
+    type:"string"
   },
   size:{
     type:"string"

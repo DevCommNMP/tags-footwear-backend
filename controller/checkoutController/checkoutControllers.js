@@ -23,7 +23,13 @@ const checkout = async (req, res) => {
   const formData = req.body.formData;
   // console.log(formData)
   const email = req.body.userEmail;
+const{ CGST,
+  SGST,
+  Tax}=req.body;
 
+  console.log(CGST,
+    SGST,
+    Tax)
   const options = {
     amount: Number(req.body.amount * 100),
     currency: "INR",
@@ -45,6 +51,8 @@ const checkout = async (req, res) => {
       product: item.productId,
       quantity: item.quantity,
       price: item.price,
+      size:item.size,
+      color:item.color,
     }));
 
 
@@ -70,8 +78,12 @@ const checkout = async (req, res) => {
         additionalInfo: formData.additionalInfo,
       },
       subtotal: req.body.amount,
+      CGST:req.body.CGST,
+      SGST:req.body.SGST,
+      Tax:req.body.Tax,
     });
 
+    console.log("orderDetails89999999999999999999999999999999999999999999999999999999999999999", orderDetails)
    const orderdata= await Order.findOne({orderId:placedOrder.orderId})
     // console.log("order",orderdata)
     // console.log("================================================")

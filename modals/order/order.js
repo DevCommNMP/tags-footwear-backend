@@ -1,49 +1,92 @@
-  const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-  const orderSchema = new mongoose.Schema({
-    orderDetails: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'OrderDetail',
-    },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true
-    },
-    orderDate: {
-      type: Date,
-      default: Date.now
-    },
-    orderId: {
-      type: String,
-      required: true
-    },
-    orderStatus: {
-      type: String,
-      enum: ['processing', 'Shipped', 'Delivered'],
-      default: 'processing'
-    },
-    PaymentStatus: {
-      type: String,
-      enum: ['Pending', 'Paid', 'Failed'],
-      default: 'Pending'
-    },
-    paymentDetails: [{
-      razorpay_order_id: {
-        type: String,
-        required: true,
-      },
-      razorpay_payment_id: {
-        type: String,
-        required: true,
-      },
-      razorpay_signature: {
-        type: String,
-        required: true,
-      },
-    }]
-  });
+// Schema for order counter
+const orderCounterSchema = new mongoose.Schema({
+  prefix: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  sequence_value: {
+    type: Number,
+    default: 0
+  }
+});
 
-  const Order = mongoose.model('Order', orderSchema);
+const OrderCounter = mongoose.model('OrderCounter', orderCounterSchema);
 
-  module.exports = Order;
+// Function to get the next sequence value for a given prefix
+async function getNextSequenceValue(prefix) {
+  const result = await OrderCounter.findOneAndUpdate(
+    { prefix },
+    { $inc: { sequence_value: 1 } },
+    { new: true, upsert: true }
+  );
+  return result.sequence_value;
+}
+
+const orderSchema = new mongoose.Schema({
+  orderDetails: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'OrderDetail',
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  orderId:{
+type:String,
+require:true,
+  },
+  orderDate: {
+    type: Date,
+    default: Date.now
+  },
+  orderNumber: {
+    type: String,
+   
+    unique: true
+  },
+ 
+  orderStatus: {
+    type: String,
+    enum: ['processing', 'Shipped', 'Delivered'],
+    default: 'processing'
+  },
+  PaymentStatus: {
+    type: String,
+    enum: ['Pending', 'Paid', 'Failed'],
+    default: 'Pending'
+  },
+  paymentDetails: [{
+    razorpay_order_id: {
+      type: String,
+      required: true,
+    },
+    razorpay_payment_id: {
+      type: String,
+      required: true,
+    },
+    razorpay_signature: {
+      type: String,
+      required: true,
+    },
+  }]
+});
+
+// Pre-save hook to generate order number
+orderSchema.pre('save', async function(next) {
+  try {
+    const prefix = 'TF'; // Prefix for the order number
+    const sequenceValue = await getNextSequenceValue(prefix);
+    this.orderNumber = `${prefix}${sequenceValue.toString().padStart(3, '0')}`; // Format the sequence value
+    next(); // Proceed to save the document
+  } catch (error) {
+    next(error); // Pass any errors to the next middleware
+  }
+});
+
+const Order = mongoose.model('Order', orderSchema);
+
+module.exports = Order;

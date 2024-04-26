@@ -1,4 +1,5 @@
 const Order = require("../../modals/order/order");
+// const OrderCounter = require("../../modals/orderCounter/orderCounterSchema");
 const OrderDetail = require("../../modals/orderDetails/orderDetail");
 
 
@@ -11,6 +12,7 @@ const getAllOrders = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 
 
 
@@ -32,7 +34,7 @@ const getOrderById = async (req, res) => {
 
  const getOrderDetials=  async (req, res) => {
     try {
-        const products = await OrderDetail.find();
+        const products = await OrderDetail.find().populate('productDetails.product');
         res.json(products);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -42,7 +44,7 @@ const getOrderById = async (req, res) => {
 const getOrderDetialsById = async (req, res) => {
     const {Id}= req.params;
      try {
-         const orderdata = await OrderDetail.findById(Id);
+         const orderdata = await OrderDetail.findById(Id).populate('productDetails.product');
          
          if (!orderdata) {
              return res.status(404).json({ message: 'orderdata not found' });
@@ -58,5 +60,6 @@ module.exports={
     getAllOrders,
     getOrderById,
     getOrderDetials, 
-    getOrderDetialsById
+    getOrderDetialsById,
+    
 }

@@ -1,12 +1,14 @@
 // productRoutes.js
 
 const express = require('express');
-const { getAllOrders,getOrderById,getOrderDetials,getOrderDetialsById } = require('../../controller/orders/orderController');
+const { getAllOrders,getOrderById,getOrderDetials,getOrderDetialsById, } = require('../../controller/orders/orderController');
 const router = express.Router();
 
 // Route to get all orders 
 
 router.get('/orders',getAllOrders);
+
+
 router.get('/orderDetails',getOrderDetials)
 
 // // Route to get a single product by ID
