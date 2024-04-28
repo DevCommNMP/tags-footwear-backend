@@ -27,9 +27,8 @@ const{ CGST,
   SGST,
   Tax}=req.body;
 
-  console.log(CGST,
-    SGST,
-    Tax)
+
+
   const options = {
     amount: Number(req.body.amount * 100),
     currency: "INR",
@@ -80,10 +79,10 @@ const{ CGST,
       subtotal: req.body.amount,
       CGST:req.body.CGST,
       SGST:req.body.SGST,
-      Tax:req.body.Tax,
+      totalTax:req.body.Tax,
     });
 
-    console.log("orderDetails89999999999999999999999999999999999999999999999999999999999999999", orderDetails)
+    console.log("orderDetails", orderDetails)
    const orderdata= await Order.findOne({orderId:placedOrder.orderId})
     // console.log("order",orderdata)
     // console.log("================================================")
@@ -93,11 +92,13 @@ const{ CGST,
     { orderId: placedOrder.orderId },
     { $set: { orderDetails: OrderDetaitlsData._id } },
     { new: true }
+      
   );
   const updateUserData = await User.findOneAndUpdate(
     { email: email }, // Assuming email is defined elsewhere in your code
     { $push: { order: modifyOrderData._id } }, // Assuming you want to push the modified order _id to the user's orders array
     { new: true }
+
   );
   console.log(updateUserData)
     res.status(200).json({ success: true, order });
@@ -159,6 +160,7 @@ const paymentVerification = async (req, res) => {
         },
         { new: true }
       );
+
       // console.log(orderData);
 
       // Redirect to payment success page

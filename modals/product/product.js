@@ -69,6 +69,7 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  
   promotionalPrice: {
     type: Number,
     // required: true,

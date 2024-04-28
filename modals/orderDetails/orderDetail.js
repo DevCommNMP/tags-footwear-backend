@@ -28,15 +28,7 @@ const orderDetailSchema = new mongoose.Schema({
     type: Number,
       required: true
   },
-  CGST:{
-    type:"string"
-  },
-  SGST:{
-    type:"string"
-  },
-  Tax:{
-    type:"string"
-  },
+
   size:{
     type:"string"
   },
@@ -98,6 +90,19 @@ billingDetails: {
   subtotal: {
     type: Number,
     required: true
+  },
+  CGST:{
+    type: Number,
+  },
+  SGST:{
+    type: Number,
+  },
+  totalTax:{
+    type: Number,
+  },
+  Date:{
+    type:Date,
+    default: Date.now
   }
 });
 
