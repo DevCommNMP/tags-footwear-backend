@@ -15,15 +15,15 @@ const dbConnect = require('./database/connectDB');
 const seedData=require('./seed')
 // Define CORS middleware configuration
 // Define an array of allowed origins
-const allowedOrigins = [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'https://mail.google.com',
-//     'https://tags-footwear-admin.vercel.app',
-//     'https://tags-website-frontend.vercel.app',
-//     `http://103.169.86.3:5173`,
-// `http://103.169.86.3:5174`
-];
+    const allowedOrigins = [
+        'http://localhost:5173',
+        'http://localhost:5174',
+        'https://mail.google.com',
+        'https://tagsfootwear.com',
+        'https://tagsfootwear.com',
+        'https://admin.tagsfootwear.com',
+   
+    ];
 
 // Define CORS middleware configuration
 const corsOptions = {
@@ -80,7 +80,7 @@ app.use('/api',orderRoutes)
 const PORT = process.env.PORT || 5000;
 
 // Define a route for the root URL ("/") to send a JSON response with a message indicating the server is running
-app.get("/", (req, res) => {
+app.get("/", (req, reFs) => {
     res.json(`server is running on ${PORT} smoothly`);
 });
 
