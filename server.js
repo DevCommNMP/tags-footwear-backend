@@ -79,7 +79,7 @@ app.use('/api',orderRoutes)
 const PORT = process.env.PORT || 5000;
 
 // Define a route for the root URL ("/") to send a JSON response with a message indicating the server is running
-app.get("/", (req, reFs) => {
+app.get("/", (req, res) => {
     res.json(`server is running on ${PORT} smoothly`);
 });
 
