@@ -16,16 +16,15 @@ const seedData=require('./seed')
 // Define CORS middleware configuration
 // Define an array of allowed origins
     const allowedOrigins = [
-        'http://localhost:5173',
-        'http://localhost:5174',
         'https://mail.google.com',
         'https://tagsfootwear.com',
-        'https://tagsfootwear.com',
         'https://admin.tagsfootwear.com',
+        `http://localhost:5173`,
+        `http://localhost:5174`,
    
     ];
 
-// Define CORS middleware configuration
+// Define CORS middleware c bonfiguration
 const corsOptions = {
     origin: function (origin, callback) {
         // Check if the origin is allowed or if it's undefined (e.g., direct access)
