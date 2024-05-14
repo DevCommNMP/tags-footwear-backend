@@ -20,7 +20,9 @@ const seedData=require('./seed')
         'https://tagsfootwear.com',
         'https://admin.tagsfootwear.com',
         `http://localhost:5173`,
+        `http://192.168.1.32:5173`,
         `http://localhost:5174`,
+        
    
     ];
 

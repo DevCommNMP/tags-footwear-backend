@@ -3,6 +3,8 @@ const User = require("../../modals/user/User");
 const expressAsyncHandler = require("express-async-handler");
 const nodemailer = require("nodemailer");
 const jwt=require('jsonwebtoken')
+const bcrypt = require('bcrypt');
+
 //  const BASE_URL_Password=`${process.env.BASE_URL}/reset-password`
 
 const registerUser = expressAsyncHandler(async (req, res) => {
@@ -623,7 +625,7 @@ const registerUser = expressAsyncHandler(async (req, res) => {
                                           <p
                                             style="margin: 0; word-break: break-word"
                                           >
-                                            Hey ${user.username}, We're thrilled to
+                                            Hey ${user.username} We're thrilled to
                                             have you on board at
                                             <strong>Tags Footwear!</strong> To
                                             finalize your registration, please click
@@ -1043,7 +1045,7 @@ const registerUser = expressAsyncHandler(async (req, res) => {
                                           </p>
                                           <ul>
                                                                                   <li>
-                                                                                   Address: 1368, D-5, Narayana Shasthri Road, Devaraj Mohalla, Mysore - 570001
+                                           Address: 1368, D-5, Narayana Shasthri Road, Devaraj Mohalla, Mysore - 570001
                                                                                   </li>
                                                                                 <li>(+91) 98444 88700</li>
                                                        
@@ -1404,10 +1406,12 @@ const passwordResetMail=expressAsyncHandler(async (req, res) => {
 
 
   const {email}=req.body;
-  const token=generateToken();
+  const user = await User.findOne({ email: email });
+  // console.log("jdsbbbbbbbbbbbbb", user);
+  const token=generateToken(user._id);
   const expirationTime = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes in milliseconds
 
-  const user = await User.findOneAndUpdate(
+  const updateUser = await User.findOneAndUpdate(
     { email: email },
     {
       forgotPasswordVerificationToken: token,
@@ -1415,7 +1419,7 @@ const passwordResetMail=expressAsyncHandler(async (req, res) => {
     }
   );
   
-  console.log(user)
+  // console.log(user)
   let BASE_URL_Password=`${process.env.BASE_URL}/reset-password/${token}`
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -2753,32 +2757,88 @@ const passwordResetMail=expressAsyncHandler(async (req, res) => {
 });
 
 const verifyForgotPasswordToken = expressAsyncHandler(async (req, res) => {
-  // const { password } = req.body;
-  const authHeader = req.headers['authorization'];
-  
-  if (!authHeader) {
-    return res.status(401).json({ success: false, message: 'Something went wrong, try again' });
-  }
-  
-  const token = authHeader.split(' ')[1];
-  
   try {
-    const decoded = await jwt.verify(token, process.env.JWT_KEY);
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+      return res.status(401).json({ success: false, message: 'Authorization header is missing' });
+    }
+    
+    // Extract the token from the Authorization header
+    const token = authHeader.split(' ')[1];
+    
+    // Verify the JWT token
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
     const user = await User.findById(decoded.id);
     const currentTime = new Date();
     
+    if (!user) {
+      console.log("User not found");
+      return res.status(201).json({ success: false, message: 'User not found' });
+    }
+
     if (user.forgotPasswordVerificationTokenExpires < currentTime) {
-      return res.status(401).json({ success: false, message: "Token Expired" });
+      console.log("Token Expired");
+      return res.status(201).json({ success: false, message: "Token Expired" });
     }
     
     return res.status(200).json({ success: true, message: "" });
   } catch (err) {
-    // Token is invalid or expired
     console.error(err);
-    return res.status(401).json({ error: 'Invalid or expired token' });
+    console.log("Invalid or expired token");
+    return res.status(201).json({ message:"Something went wrong try again",});
   }
 });
 
+
+const updatePassword = async (req, res) => {
+  try {
+    const newPassword = req.body.password;
+    const authHeader = req.headers['authorization'];
+// console.log(authHeader);
+    // Check if the Authorization header is present
+    if (!authHeader) {
+      return res.status(401).json({ success: false, message: 'Authorization header is missing' });
+    }
+    
+    // Extract the token from the Authorization header
+    const token = authHeader.split(' ')[1];
+    
+    // Verify the JWT token
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
+    
+    // Find the user by ID
+    const user = await User.findById(decoded.id);
+
+    // If user is not found, return 404
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // console.log(user)
+    // Verify the current password
+    
+
+    // Validate the new password
+    if (!newPassword || newPassword.length < 6) {
+      return res.status(400).json({ success: false, message: 'New password must be at least 6 characters long' });
+    }
+
+    // Hash the new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    // Update the user's password in the database
+    user.password = hashedPassword;
+    await user.save();
+
+    // Return success message
+    return res.status(200).json({ success: true, message: 'Password updated successfully' });
+  } catch (error) {
+    // Handle any errors and return 500 status with error message
+    console.error(error);
+    return res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+};
 
 
 
@@ -2860,5 +2920,6 @@ module.exports = {
   verifyAccount,
   getUser,
   verifyForgotPasswordToken,
-    passwordResetMail
+    passwordResetMail,
+    updatePassword
 };
