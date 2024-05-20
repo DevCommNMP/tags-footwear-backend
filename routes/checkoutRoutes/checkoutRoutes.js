@@ -1,10 +1,11 @@
 const express = require('express');
-const { checkout,getKeys,pincodeData,paymentVerification } = require('../../controller/checkoutController/checkoutControllers');
+const { checkout,getKeys,pincodeData,paymentVerification,codCheckout } = require('../../controller/checkoutController/checkoutControllers');
 const router = express.Router();
 
 // Route to create a new review
 router.get('/getkeys',getKeys)
 router.post('/checkout',checkout)
+router.post('/codCheckout',codCheckout)
 router.post('/picodedata',pincodeData)
 router.post('/payment-verification',paymentVerification)
 

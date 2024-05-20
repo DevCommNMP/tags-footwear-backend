@@ -10,6 +10,18 @@ const instance = new Razorpay({
   key_secret: process.env.RAZORPAY_SECRET,
 });
 
+const generateOrderId = () => {
+  const alphanumericCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const orderIdLength = 10; // You can adjust the length of the order ID as needed
+  let orderId = 'order_';
+
+  for (let i = 0; i < orderIdLength; i++) {
+    const randomIndex = Math.floor(Math.random() * alphanumericCharacters.length);
+    orderId += alphanumericCharacters[randomIndex];
+  }
+
+  return orderId;
+};
 const getKeys = async (req, res) => {
   try {
     await res.status(200).json({ key: process.env.RAZORPAY_API_KEY });
@@ -19,27 +31,95 @@ const getKeys = async (req, res) => {
 };
 
 //
+const codCheckout=async (req,res)=>{
+ try {
+  const formData = req.body.formData;
+
+  const amount=req.body.amount;
+  const email = req.body.userEmail;
+const{ CGST,
+  SGST, 
+  Tax}=req.body;
+  const user = await User.findOne({ email });
+
+   
+    const placedOrder = await Order.create({
+      user: user.id,
+      orderId: generateOrderId(),
+    }); 
+    console.log(placedOrder.orderId)
+    // console.log("placedOrder",placedOrder)
+    const products = req.body.cartdata.map((item) => ({
+      product: item.productId,
+      quantity: item.quantity,
+      price: item.price,
+      size:item.size,
+      color:item.color,
+    }));
+
+
+    const orderDetails = await OrderDetail.create({
+      orderId: placedOrder.orderId,
+      productDetails: products,
+      billingDetails: {
+        fname: formData.fname,
+        lname: formData.lname,
+        billing_address: formData.billing_address,
+        billing_address2: formData.billing_address2,
+        city: formData.city,
+        zipcode: formData.zipcode,
+        phone: formData.phone,
+        state: formData.state,
+        email: formData.email,
+        additionalInfo: formData.additionalInfo,
+      },
+      subtotal: req.body.amount,
+      CGST:req.body.CGST,
+      SGST:req.body.SGST,
+      totalTax:req.body.Tax,
+    });
+
+    console.log("orderDetails", orderDetails)
+   const orderdata= await Order.findOne({orderId:placedOrder.orderId})
+  
+   const OrderDetaitlsData= await OrderDetail.findOne({orderId:orderdata.orderId})
+  //  console.log("orderDetails",OrderDetaitlsData)
+  const modifyOrderData = await Order.findOneAndUpdate(
+    { orderId: placedOrder.orderId },
+    { $set: { orderDetails: OrderDetaitlsData._id } },
+    { new: true }
+      
+  );
+  const updateUserData = await User.findOneAndUpdate(
+    { email: email }, // Assuming email is defined elsewhere in your code
+    { $push: { order: modifyOrderData._id } }, // Assuming you want to push the modified order _id to the user's orders array
+    { new: true }
+
+  );
+  console.log(updateUserData)
+    res.status(200).json({ success: true, modifyOrderData });
+  // res.status(200).json({formData,email,CGST,SGST,Tax, success:true,})
+
+ } catch (error) {
+  console.log(error.message)
+  res.status(201).json({errorMsg:error.message,success:false,})
+ }
+}
+
 const checkout = async (req, res) => {
   const formData = req.body.formData;
-  // console.log(formData)
-  const email = req.body.userEmail;
+
+  const email = req.body.userEmail; 
 const{ CGST,
   SGST,
   Tax}=req.body;
-
-
-
-  const options = {
+  const options = { 
     amount: Number(req.body.amount * 100),
     currency: "INR",
   };
   try {
     const order = await instance.orders.create(options);
-    // console.log(order);
-    // const email=req.body.userEmail
     const user = await User.findOne({ email });
-
-   
     const placedOrder = await Order.create({
       user: user.id,
       orderId: order.id,
@@ -186,6 +266,7 @@ const paymentVerification = async (req, res) => {
 module.exports = {
   checkout,
   getKeys,
+  codCheckout,
   pincodeData,
   paymentVerification,
 };
