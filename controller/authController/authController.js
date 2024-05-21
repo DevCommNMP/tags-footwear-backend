@@ -5,7 +5,7 @@ const nodemailer = require("nodemailer");
 const jwt=require('jsonwebtoken')
 const bcrypt = require('bcrypt');
 
-//  const BASE_URL_Password=`${process.env.BASE_URL}/reset-password`
+
 
 const registerUser = expressAsyncHandler(async (req, res) => {
  
@@ -21,11 +21,11 @@ const registerUser = expressAsyncHandler(async (req, res) => {
     const user = await User.create({ email, username, password });
     const token = await generateToken(user._id);
     const BASE_URL=`${process.env.BASE_URL}/verify-account/${token}`;
-    // const BASE_URL_Password=`${process.env.BASE_URL}/reset-password`
+   
     const transporter = nodemailer.createTransport({
       service: "gmail",
       host: "smtp.gmail.com",
-      port: 587,
+      port:  587,
       secure: false, // Use `true` for port 465, `false` for all other ports
       auth: {
         user: "as9467665000@gmail.com",
@@ -1407,7 +1407,7 @@ const passwordResetMail=expressAsyncHandler(async (req, res) => {
 
   const {email}=req.body;
   const user = await User.findOne({ email: email });
-  // console.log("jdsbbbbbbbbbbbbb", user);
+  
   const token=generateToken(user._id);
   const expirationTime = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes in milliseconds
 
@@ -1421,6 +1421,7 @@ const passwordResetMail=expressAsyncHandler(async (req, res) => {
   
   // console.log(user)
   let BASE_URL_Password=`${process.env.BASE_URL}/reset-password/${token}`
+
   const transporter = nodemailer.createTransport({
     service: "gmail",
     host: "smtp.gmail.com",
@@ -2729,7 +2730,7 @@ const passwordResetMail=expressAsyncHandler(async (req, res) => {
     </html>`, // HTML body
   };
   // const user = await User.findOne({ email: email });
-  console.log(email)
+  // console.log(email)
   const sendMail = async (transporter, mailOptions) => {
     try {
       await transporter.sendMail(mailOptions);
@@ -2757,10 +2758,11 @@ const passwordResetMail=expressAsyncHandler(async (req, res) => {
 });
 
 const verifyForgotPasswordToken = expressAsyncHandler(async (req, res) => {
+  
   try {
     const authHeader = req.headers['authorization'];
     if (!authHeader) {
-      return res.status(401).json({ success: false, message: 'Authorization header is missing' });
+      return res.status(401).json({ success: false, message: 'Token is missing or expired' });
     }
     
     // Extract the token from the Authorization header
@@ -2768,9 +2770,10 @@ const verifyForgotPasswordToken = expressAsyncHandler(async (req, res) => {
     
     // Verify the JWT token
     const decoded = jwt.verify(token, process.env.JWT_KEY);
+    // console.log(decoded)
     const user = await User.findById(decoded.id);
     const currentTime = new Date();
-    
+    console.log(user+"jskdhfjdhxjfbdjbgfhj")
     if (!user) {
       console.log("User not found");
       return res.status(201).json({ success: false, message: 'User not found' });
@@ -2794,7 +2797,7 @@ const updatePassword = async (req, res) => {
   try {
     const newPassword = req.body.password;
     const authHeader = req.headers['authorization'];
-// console.log(authHeader);
+
     // Check if the Authorization header is present
     if (!authHeader) {
       return res.status(401).json({ success: false, message: 'Authorization header is missing' });
@@ -2814,21 +2817,16 @@ const updatePassword = async (req, res) => {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
-    // console.log(user)
-    // Verify the current password
-    
+    // Hash the new password
+  
 
-    // Validate the new password
+    // Validate the new password after hashing
     if (!newPassword || newPassword.length < 6) {
       return res.status(400).json({ success: false, message: 'New password must be at least 6 characters long' });
     }
 
-    // Hash the new password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
-
     // Update the user's password in the database
-    user.password = hashedPassword;
+    user.password = newPassword;
     await user.save();
 
     // Return success message
@@ -2877,7 +2875,7 @@ const login = expressAsyncHandler(async (req, res) => {
 const isAuthenticated = (req, res) => {
   console.log("User is authenticated");
   return;
-  // You can implement your authentication logic here
+  // You can implement your  authentication logic here
 };
 const verifyAccount = async (req, res) => {
   const authHeader = req.headers['authorization'];

@@ -4,11 +4,23 @@ const Order = require("../../modals/order/order");
 const OrderDetail = require("../../modals/orderDetails/orderDetail");
 const crypto = require("crypto");
 var query = require("india-pincode-search");
+const axios=require("axios")
 const Payment = require("../../modals/payments/paymentModel");
 const instance = new Razorpay({
   key_id: process.env.RAZORPAY_API_KEY,
   key_secret: process.env.RAZORPAY_SECRET,
 });
+
+var email = process.env.courierEmail;
+var password = process.env.courierPassword;
+
+// Concatenate email and password with a colon
+var credentials = email + ':' + password;
+
+// Encode the concatenated string using Base64
+var encodedCredentials = btoa(credentials);
+
+// console.log(encodedCredentials);
 
 const generateOrderId = () => {
   const alphanumericCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -29,82 +41,220 @@ const getKeys = async (req, res) => {
     res.status(201).json({ message: "something went wrong try again" });
   }
 };
+// const codCheckout = async (req, res) => {
+//   try {
+//       const formData = req.body.formData;
+//       const amount = req.body.amount;
+//       const email = req.body.userEmail;
+//       const { CGST, SGST, Tax } = req.body;
+//       const user = await User.findOne({ email });
 
-//
-const codCheckout=async (req,res)=>{
- try {
-  const formData = req.body.formData;
+//       const placedOrder = await Order.create({
+//           user: user.id,
+//           orderId: generateOrderId(),
+//       });
 
-  const amount=req.body.amount;
-  const email = req.body.userEmail;
-const{ CGST,
-  SGST, 
-  Tax}=req.body;
-  const user = await User.findOne({ email });
+//       const products = req.body.cartdata.map((item) => ({
+//           product: item.productId,
+//           quantity: item.quantity,
+//           price: item.price,
+//           size: item.size,
+//           color: item.color,
+//       }));
 
-   
-    const placedOrder = await Order.create({
-      user: user.id,
-      orderId: generateOrderId(),
-    }); 
-    console.log(placedOrder.orderId)
-    // console.log("placedOrder",placedOrder)
-    const products = req.body.cartdata.map((item) => ({
-      product: item.productId,
-      quantity: item.quantity,
-      price: item.price,
-      size:item.size,
-      color:item.color,
-    }));
+//       const orderDetails = await OrderDetail.create({
+//           orderId: placedOrder.orderId,
+//           productDetails: products,
+//           billingDetails: {
+//               fname: formData.fname,
+//               lname: formData.lname,
+//               billing_address: formData.billing_address,
+//               billing_address2: formData.billing_address2,
+//               city: formData.city,
+//               zipcode: formData.zipcode,
+//               phone: formData.phone,
+//               state: formData.state,
+//               email: formData.email,
+//               additionalInfo: formData.additionalInfo,
+//           },
+//           subtotal: req.body.amount,
+//           CGST: req.body.CGST,
+//           SGST: req.body.SGST,
+//           totalTax: req.body.Tax,
+//       });
 
+//       const orderdata = await Order.findOne({ orderId: placedOrder.orderId });
+//       const OrderDetaitlsData = await OrderDetail.findOne({ orderId: orderdata.orderId });
+//       const courierPromises = req.body.cartdata.map(async (item) => {
+//           return axios.post('https://api.tekipost.com/connect/order-ship', {
+//               "order_no": generateOrderId(),
+//               "customer_name": formData.fname + ' ' + formData.lname,
+//               "customer_address_1": formData.billing_address,
+//               "customer_address_2": formData.billing_address2,
+//               "customer_pincode": formData.zipcode,
+//               "customer_city": formData.city,
+//               "customer_state": formData.state,
+//               "customer_mobile_no": formData.phone,
+//               "customer_alt_no": "",
+//               "customer_email": formData.email,
+//               "product_category": "Fashion & lifestyle",
+//               "product_code": item.productCode,
+//               "product_name": item.product,
+//               "product_qty": item.quantity,
+//               "invoice_value": item.price,
+//               "cod_value": "1",
+//               "weight_in_kgs": "0.5",
+//               "length_in_cms": "10",
+//               "breadth_in_cms": "10",
+//               "height_in_cms": "10",
+//               "warehouse_id": "1",
+//               "movement_type": "Forward",
+//               "store_id": "",
+//               "courier_id": "",
+//               "custom_awb_no": "",
+//               "service_name": "Surface",
+//           }, {
+//               headers: {
+//                   'Authorization': `Bearer ${encodedCredentials}`
+//               }
+//           });
+//       });
 
-    const orderDetails = await OrderDetail.create({
-      orderId: placedOrder.orderId,
-      productDetails: products,
-      billingDetails: {
-        fname: formData.fname,
-        lname: formData.lname,
-        billing_address: formData.billing_address,
-        billing_address2: formData.billing_address2,
-        city: formData.city,
-        zipcode: formData.zipcode,
-        phone: formData.phone,
-        state: formData.state,
-        email: formData.email,
-        additionalInfo: formData.additionalInfo,
-      },
-      subtotal: req.body.amount,
-      CGST:req.body.CGST,
-      SGST:req.body.SGST,
-      totalTax:req.body.Tax,
-    });
+//       try {
+//           const responses = await Promise.all(courierPromises);
+//           console.log(responses); // Log all responses
+//           // Handle responses if needed
+//       } catch (error) {
+//           console.error("Error sending courier data:", error);
+//           // Handle error if necessary
+//       }
 
-    console.log("orderDetails", orderDetails)
-   const orderdata= await Order.findOne({orderId:placedOrder.orderId})
-  
-   const OrderDetaitlsData= await OrderDetail.findOne({orderId:orderdata.orderId})
-  //  console.log("orderDetails",OrderDetaitlsData)
-  const modifyOrderData = await Order.findOneAndUpdate(
-    { orderId: placedOrder.orderId },
-    { $set: { orderDetails: OrderDetaitlsData._id } },
-    { new: true }
-      
-  );
-  const updateUserData = await User.findOneAndUpdate(
-    { email: email }, // Assuming email is defined elsewhere in your code
-    { $push: { order: modifyOrderData._id } }, // Assuming you want to push the modified order _id to the user's orders array
-    { new: true }
+//       const modifyOrderData = await Order.findOneAndUpdate(
+//           { orderId: placedOrder.orderId },
+//           { $set: { orderDetails: OrderDetaitlsData._id } },
+//           { new: true }
+//       );
 
-  );
-  console.log(updateUserData)
-    res.status(200).json({ success: true, modifyOrderData });
-  // res.status(200).json({formData,email,CGST,SGST,Tax, success:true,})
+//       const updateUserData= await User.findOneAndUpdate(
+//           { email: email },
+//           { $push: { order: modifyOrderData._id } },
+//           { new: true }
+//       );
 
- } catch (error) {
-  console.log(error.message)
-  res.status(201).json({errorMsg:error.message,success:false,})
- }
+//       res.status(200).json({ success: true, modifyOrderData });
+//   } catch (error) {
+//       console.log(error.message);
+//       res.status(201).json({ errorMsg: error.message, success: false });
+//   }
+// }
+
+const codCheckout = async (req, res) => {
+  try {
+      const formData = req.body.formData;
+      const amount = req.body.amount;
+      const email = req.body.userEmail;
+      const { CGST, SGST, Tax } = req.body;
+      const user = await User.findOne({ email });
+
+      const placedOrder = await Order.create({
+          user: user.id,
+          orderId: generateOrderId(),
+      });
+
+      const products = req.body.cartdata.map((item) => ({
+          product: item.productId,
+          quantity: item.quantity,
+          price: item.price,
+          size: item.size,
+          color: item.color,
+      }));
+
+      const orderDetails = await OrderDetail.create({
+          orderId: placedOrder.orderId,
+          productDetails: products,
+          billingDetails: {
+              fname: formData.fname,
+              lname: formData.lname,
+              billing_address: formData.billing_address,
+              billing_address2: formData.billing_address2,
+              city: formData.city,
+              zipcode: formData.zipcode,
+              phone: formData.phone,
+              state: formData.state,
+              email: formData.email,
+              additionalInfo: formData.additionalInfo,
+          },
+          subtotal: req.body.amount,
+          CGST: req.body.CGST,
+          SGST: req.body.SGST,
+          totalTax: req.body.Tax,
+      });
+
+      const orderdata = await Order.findOne({ orderId: placedOrder.orderId });
+      const OrderDetaitlsData = await OrderDetail.findOne({ orderId: orderdata.orderId });
+      const courierPromises = req.body.cartdata.map(async (item) => {
+          return axios.post('https://api.tekipost.com/connect/order-ship', {
+              "order_no": generateOrderId(),
+              "customer_name": formData.fname + ' ' + formData.lname,
+              "customer_address_1": formData.billing_address,
+              "customer_address_2": formData.billing_address2,
+              "customer_pincode": formData.zipcode,
+              "customer_city": formData.city,
+              "customer_state": formData.state,
+              "customer_mobile_no": formData.phone,
+              "customer_alt_no": "",
+              "customer_email": formData.email,
+              "product_category": "Fashion & lifestyle",
+              "product_code": item.productCode,
+              "product_name": item.product,
+              "product_qty": item.quantity,
+              "invoice_value": item.price,
+              "cod_value": "1",
+              "weight_in_kgs": "0.5",
+              "length_in_cms": "10",
+              "breadth_in_cms": "10",
+              "height_in_cms": "10",
+              "warehouse_id": "1",
+              "movement_type": "Forward",
+              "store_id": "",
+              "courier_id": "",
+              "custom_awb_no": "",
+              "service_name": "Surface",
+          }, {
+              headers: {
+                  'Authorization': `Bearer ${encodedCredentials}`
+              }
+          });
+      });
+
+      try {
+          const responses = await Promise.all(courierPromises);
+          console.log(responses); // Log all responses
+          // Handle responses if needed
+      } catch (error) {
+          console.error("Error sending courier data:", error);
+          // Handle error if necessary
+      }
+
+      const modifyOrderData = await Order.findOneAndUpdate(
+          { orderId: placedOrder.orderId },
+          { $set: { orderDetails: OrderDetaitlsData._id } },
+          { new: true }
+      );
+
+      const updateUserData= await User.findOneAndUpdate(
+          { email: email },
+          { $push: { order: modifyOrderData._id } },
+          { new: true }
+      );
+
+      res.status(200).json({ success: true, modifyOrderData });
+  } catch (error) {
+      console.log(error.message);
+      res.status(201).json({ errorMsg: error.message, success: false });
+  }
 }
+
 
 const checkout = async (req, res) => {
   const formData = req.body.formData;
@@ -134,13 +284,6 @@ const{ CGST,
       color:item.color,
     }));
 
-
-
-
-
-
-    // console.log("usersjdkbddjfskbnkjdnfkjnkfsjdkjdsfkjdfsb",user)
-    //     console.log("placedOrdersdnfjknskjdfnkjsfkjnjdskfnjkfdsn",placedOrder);
     const orderDetails = await OrderDetail.create({
       orderId: placedOrder.orderId,
       productDetails: products,
@@ -164,10 +307,9 @@ const{ CGST,
 
     console.log("orderDetails", orderDetails)
    const orderdata= await Order.findOne({orderId:placedOrder.orderId})
-    // console.log("order",orderdata)
-    // console.log("================================================")
+   
    const OrderDetaitlsData= await OrderDetail.findOne({orderId:orderdata.orderId})
-  //  console.log("orderDetails",OrderDetaitlsData)
+
   const modifyOrderData = await Order.findOneAndUpdate(
     { orderId: placedOrder.orderId },
     { $set: { orderDetails: OrderDetaitlsData._id } },
@@ -187,7 +329,7 @@ const{ CGST,
       .status(403)
       .json({ message: "something went wrong try again", succes: false });
   }
-  // console.log(orderDetails);
+ 
 };
 
 const pincodeData = (req, res) => {
@@ -203,7 +345,7 @@ const pincodeData = (req, res) => {
 };
 
 const paymentVerification = async (req, res) => {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature} =
     req.body;
 
   const body = razorpay_order_id + "|" + razorpay_payment_id;

@@ -1,5 +1,5 @@
-var email = "amreen.intra@gmail.com";
-var password = "123456";
+var email = process.env.courierEmail;
+var password = process.env.courierPassword;
 
 // Concatenate email and password with a colon
 var credentials = email + ':' + password;
