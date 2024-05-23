@@ -1,7 +1,7 @@
 // productRoutes.js
 
 const express = require('express');
-const { getAllOrders,getOrderById,getOrderDetials,getOrderDetialsById, } = require('../../controller/orders/orderController');
+const { getAllOrders,getOrderById,getOrderDetials,getOrderDetialsById,updateOrderStatus } = require('../../controller/orders/orderController');
 const router = express.Router();
 
 // Route to get all orders 
@@ -17,5 +17,7 @@ router.get('/orders/:Id', getOrderById);
 
 router.get('/orderDetails/:Id', getOrderDetialsById);
 
+ //orderUpdation by tekipost delivery system
+ router.post('/trackingStatusUpdate', updateOrderStatus);
 
 module.exports = router;

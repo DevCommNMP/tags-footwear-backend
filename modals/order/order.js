@@ -35,10 +35,50 @@ const orderSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  merchant_id :{
+    type:String,
+    // require:true,
+  },
+  awb_no  :{
+    type:String,
+    // require:true,
+  },
+  pickup_pincode :{
+    type:String,
+    // require:true,
+  },
+  destination_pincode:{
+    type:String,
+  },
+  aggregator_shipment_id :{
+    type:String,
+  },
+  courier_id:{
+    type:String,
+  },
+  status_id:{
+    type:String,
+  },
+  courier_msg:{
+    type:String,
+  },
+  courier_event_date_time:{
+    type:String,
+  },
+  current_location:{
+    type:String,
+  },
+
+  // order id generationg for tags footwear
   orderId:{
 type:String,
 require:true,
   },
+  //order_id from tekipost api which is used to track orders
+  order_id:{
+    type:String,
+    require:true,
+      },
   orderDate: {
     type: Date,
     default: Date.now
@@ -51,12 +91,12 @@ require:true,
  
   orderStatus: {
     type: String,
-    enum: ['processing', 'Shipped', 'Delivered'],
+    enum: ['processing', 'Shipped', 'Delivered','Canceled'],
     default: 'processing'
   },
   PaymentStatus: {
     type: String,
-    enum: ['Pending', 'Paid', 'Failed'],
+    enum: ['Pending', 'Paid', 'Failed','COD'],
     default: 'Pending'
   },
   paymentDetails: [{
@@ -78,7 +118,7 @@ require:true,
 // Pre-save hook to generate order number
 orderSchema.pre('save', async function(next) {
   try {
-    const prefix = 'TF'; // Prefix for the order number
+    const prefix = 'TF00'; // Prefix for the order number
     const sequenceValue = await getNextSequenceValue(prefix);
     this.orderNumber = `${prefix}${sequenceValue.toString().padStart(3, '0')}`; // Format the sequence value
     next(); // Proceed to save the document

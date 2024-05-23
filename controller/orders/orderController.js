@@ -1,6 +1,9 @@
+
+const jwt=require('jsonwebtoken');
 const Order = require("../../modals/order/order");
 // const OrderCounter = require("../../modals/orderCounter/orderCounterSchema");
 const OrderDetail = require("../../modals/orderDetails/orderDetail");
+const User = require('../../modals/user/User');
 
 
 
@@ -56,7 +59,80 @@ const getOrderDetialsById = async (req, res) => {
      }
  };
 
+
+
+//   updating order Status through tekipost delivery system
+const updateOrderStatus = async (req, res) => {
+    try {
+        let user;
+      const { order_id } = req?.body;
+    //   console.log(order_id)
+      if (!order_id) {
+        return res.status(401).json({ success: false, message: 'Order not found!' });
+      }
+  
+      const authHeader = req.headers['authorization'];
+      // Extract the token from the Authorization header
+      if(authHeader){
+        const token = authHeader.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.JWT_KEY);
+      user = await User.findById(decoded.id);
+      }
+     
+  
+      // Verify the JWT token
+      
+      if (!user) {
+        try {
+          const updateOrder = await Order.findOneAndUpdate(
+            { order_id: req?.body?.order_id },
+            {
+              $set: {
+                // merchant_id: req?.body?.merchant_id,
+                awb_no: req?.body?.awb_no,
+                pickup_pincode: req?.body?.pickup_pincode,
+                destination_pincode: req?.body?.destination_pincode,
+                // order_id: req?.body?.order_id,
+                // aggregator_shipment_id: req?.body?.aggregator_shipment_id,
+                // courier_id: req?.body?.courier_id,
+                status_id: req?.body?.status_id,
+                courier_msg: req?.body?.courier_msg,
+                // courier_event_date_time: req?.body?.courier_event_date_time,
+                // current_location: req?.body?.current_location,
+              },
+            },
+            { new: true }
+          );
+          console.log(updateOrder)
+          return res.status(201).json({ success: true, message: 'Order updated successfully', error: false });
+        } catch (error) {
+          console.error("Error updating order:", error.message);
+          return res.status(500).json({ success: false, message: error.message });
+        }
+      } else {
+        try {
+          const updateOrder = await Order.findOneAndUpdate(
+            { order_id: req?.body?.order_id },
+            {
+              $set: req?.body
+            },
+            { new: true }
+          );
+          return res.status(201).json({ success: true, message: 'Order updated successfully', error: false });
+        } catch (error) {
+          console.error("Error updating order:", error.message);
+          return res.status(500).json({ success: false, message: error.message });
+        }
+      }
+    } catch (err) {
+      console.log(err.message);
+      return res.status(201).json({ message: "Something went wrong. Please try again." });
+    }
+  }
+  
+
 module.exports={
+    updateOrderStatus,
     getAllOrders,
     getOrderById,
     getOrderDetials, 
