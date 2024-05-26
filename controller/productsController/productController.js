@@ -46,7 +46,7 @@ const createProduct = async (req, res) => {
             rating: 4.7,
             promotionalPrice:req.body.promotionalPrice,
             isPremiumLeather:req.body.isPremiumLeather,
-            reviews: [],
+            // reviews: [],
             SellingPrice: req.body.price,
         });
         res.status(201).json(product);

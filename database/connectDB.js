@@ -4,7 +4,7 @@ const { Db } = require("mongodb");
 const mongoose=require("mongoose");
 const DB_URL=process.env.DB_URL ;
 const DB_URL2="mongodb://127.0.0.1:27017/tags-footwear"
-
+const demo_URL=process.env.demo_url ;
 //connecting to database  
 const dbConnect=async()=>{
     try{

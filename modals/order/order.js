@@ -36,7 +36,7 @@ const orderSchema = new mongoose.Schema({
     required: true
   },
   merchant_id :{
-    type:String,
+    type:Number,
     // require:true,
   },
   awb_no  :{
@@ -44,26 +44,26 @@ const orderSchema = new mongoose.Schema({
     // require:true,
   },
   pickup_pincode :{
-    type:String,
+    type:Number,
     // require:true,
   },
   destination_pincode:{
-    type:String,
+    type:Number,
   },
   aggregator_shipment_id :{
     type:String,
   },
   courier_id:{
-    type:String,
+    type:Number,
   },
   status_id:{
-    type:String,
+    type:Number,
   },
   courier_msg:{
     type:String,
   },
   courier_event_date_time:{
-    type:String,
+    type:Date,
   },
   current_location:{
     type:String,
@@ -76,7 +76,7 @@ require:true,
   },
   //order_id from tekipost api which is used to track orders
   order_id:{
-    type:String,
+    type:Number,
     require:true,
       },
   orderDate: {

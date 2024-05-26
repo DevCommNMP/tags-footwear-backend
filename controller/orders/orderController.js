@@ -82,7 +82,7 @@ const updateOrderStatus = async (req, res) => {
   
       // Verify the JWT token
       
-      if (!user) {
+      if (user===null||undefined) {
         try {
           const updateOrder = await Order.findOneAndUpdate(
             { order_id: req?.body?.order_id },
@@ -92,9 +92,6 @@ const updateOrderStatus = async (req, res) => {
                 awb_no: req?.body?.awb_no,
                 pickup_pincode: req?.body?.pickup_pincode,
                 destination_pincode: req?.body?.destination_pincode,
-                // order_id: req?.body?.order_id,
-                // aggregator_shipment_id: req?.body?.aggregator_shipment_id,
-                // courier_id: req?.body?.courier_id,
                 status_id: req?.body?.status_id,
                 courier_msg: req?.body?.courier_msg,
                 // courier_event_date_time: req?.body?.courier_event_date_time,
@@ -104,7 +101,7 @@ const updateOrderStatus = async (req, res) => {
             { new: true }
           );
           console.log(updateOrder)
-          return res.status(201).json({ success: true, message: 'Order updated successfully', error: false });
+          return res.status(201).json({ success: true, message: 'order status updated successfully', error: false });
         } catch (error) {
           console.error("Error updating order:", error.message);
           return res.status(500).json({ success: false, message: error.message });
