@@ -25,7 +25,7 @@ router.post('/products/:Id', productImageUpload.single("productImage"), uploadPr
 router.post('/products/subImages/:Id', uploadSubImages.array("productSubImages"), uploadproductSubImages);
 
 // Route to get a single product by ID
-router.get('/products/:Id', getProductById);
+router.get('/products/:id', getProductById);
 
 //Route to update a particular product
 router.put('/products/:id', updateProduct);
