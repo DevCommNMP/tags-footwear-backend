@@ -88,16 +88,22 @@ require:true,
    
     unique: true
   },
- 
+ invoice_no:{
+  type: String,
+ },
   orderStatus: {
     type: String,
-    enum: ['processing', 'Shipped', 'Delivered','Canceled'],
+    enum: ['processing', 'Shipped', 'Delivered','Cancelled'],
     default: 'processing'
   },
   PaymentStatus: {
     type: String,
     enum: ['Pending', 'Paid', 'Failed','COD'],
     default: 'Pending'
+  },
+  razorpay_order_id:{
+    type: String,
+    // required: true,
   },
   paymentDetails: [{
     razorpay_order_id: {

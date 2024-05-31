@@ -17,8 +17,7 @@ const getProductById = async (req, res) => {
     try {
       // Finding a product by its title
 const product = await Product.findById(id);
-console.log(product)
-        
+
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
@@ -51,6 +50,7 @@ const createProduct = async (req, res) => {
             isPremiumLeather:req.body.isPremiumLeather,
             // reviews: [],
             SellingPrice: req.body.price,
+            discount:req.body.discount,
         });
         res.status(201).json(product);
     } catch (error) {
@@ -62,39 +62,41 @@ const createProduct = async (req, res) => {
 // Controller function to update a product by ID
 const updateProduct = async (req, res) => {
     const { id } = req.params;
-    const { title, skewId, sizesAvailable, price, colorsAvailable, description, category, footwearType, selectedTag } = req.body;
-console.log(req.body)
+    const { title, skewId, sizesAvailable, price, colorsAvailable, description, category, footwearType, selectedTag,discount } = req.body;
+    console.log(req.body);
+const productdata=await Product.findById(id)
+console.log(productdata)
     try {
         const updatedProduct = await Product.findByIdAndUpdate(
             id,
             {
-                title,
-                productImage: "",
-                productName: skewId,
-                sizesAvailable,
-                price,
-                colorsAvailable,
-                description,
-                subcategory: category,
-                subcategoryType: footwearType,
-                tag: selectedTag,
-                rating: 4.7,
-                // reviews: [],
-                SellingPrice: price
+                $set: {
+                    ...(title && { title }),
+                    ...(skewId && { productName: skewId }),
+                    ...(sizesAvailable && { sizesAvailable }),
+                    ...(price && { price, SellingPrice: price }),
+                    ...(colorsAvailable && { colorsAvailable }),
+                    ...(description && { description }),
+                    ...(category && { subcategory: category }),
+                    ...(footwearType && { subcategoryType: footwearType }),
+                    ...(selectedTag && { tag: selectedTag }),
+                    discount:discount,
+                    rating: 4.7
+                }
             },
             { new: true }
         );
 
         if (!updatedProduct) {
-            return res.status(404).json({ message: 'Product not found', success: false });
+            return res.status(404).json({success:false,error:false, message: "Product not found" });
         }
 
-        res.status(200).json({ updatedProduct, success: true });
+        res.status(200).json({success:true,error:false,updatedProduct});
     } catch (error) {
-        res.status(500).json({ message: error.message, success: false });
+        console.error(error);
+        res.status(500).json({success:false,error:false, message: "Server error" });
     }
-};
-
+}
 
 // Controller function to delete a product by ID
 const deleteProduct = async (req, res) => {

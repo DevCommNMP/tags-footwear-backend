@@ -314,10 +314,11 @@ const{ CGST,
   try {
     const order = await instance.orders.create(options);
     const user = await User.findOne({ email });
+    console.log(order);
     const placedOrder = await Order.create({
       user: user.id,
       orderId: generateOrderId(),
-      
+      razorpay_order_id:order.id
     });
 
     await req.body.cartdata.forEach((item) => {
@@ -357,14 +358,15 @@ const{ CGST,
 
   
    const orderdata= await Order.findOne({orderId:placedOrder.orderId})
-   
+   console.log("====================",orderdata)
    const OrderDetaitlsData= await OrderDetail.findOne({orderId:orderdata.orderId})
-console.log(orderdata)
+console.log("00000000000000000000000",OrderDetaitlsData)
    const courierRequest = async () => {
     try {
       const response = await axios.post(
         'https://api.tekipost.com/connect/order-ship',
         {
+          // invoice_no:order
           order_no: orderdata.orderNumber, // Change to orderId
           customer_name: formData.fname + ' ' + formData.lname,
           customer_address_1: formData.billing_address,
@@ -406,7 +408,7 @@ console.log(orderdata)
   };
   try {
     const response = await courierRequest();
-console.log(response);
+// console.log(response);
     if (!response.error ) {
       const modifyOrderData = await Order.findOneAndUpdate(
         { orderId: placedOrder.orderId },
@@ -433,7 +435,7 @@ console.log(response);
     { new: true }
 
   );
-  console.log(updateUserData)
+  // console.log(updateUserData)
     res.status(200).json({ success: true, order });
   } catch (error) {
     res
@@ -448,7 +450,7 @@ const pincodeData = (req, res) => {
   const { pincode } = req.body;
   // res.json(pincode);
   const data = query.search(pincode);
-  console.log(data);
+  // console.log(data);
   if (data.length == 0) {
     res.status(201).json({ success: false });
     return;
@@ -468,7 +470,7 @@ const paymentVerification = async (req, res) => {
     .digest("hex");
 
   const isAuthentic = expectedSignature === razorpay_signature;
-  console.log(isAuthentic);
+  // console.log(isAuthentic);
 
   if (isAuthentic) {
     try {
@@ -481,7 +483,7 @@ const paymentVerification = async (req, res) => {
 
       // Update order payment status
       const orderData = await Order.findOneAndUpdate(
-        { orderId: razorpay_order_id },
+        { razorpay_order_id: razorpay_order_id },
         {
           $set: {
             PaymentStatus: "Paid",
@@ -504,7 +506,7 @@ const paymentVerification = async (req, res) => {
         { $set: { PaymentStatus: "Failed" } },
         { new: true }
       );
-      console.error("Error processing payment:", error);
+      // console.error("Error processing payment:", error);
       res
         .status(500)
         .json({ success: false, message: "Error processing payment" });

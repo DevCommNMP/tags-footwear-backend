@@ -87,6 +87,9 @@ default:false
     type: String,
     // required: true,
   },
+  discount:{
+    type:String,
+  },
   rating: Number,
   // reviews: [
   //   {

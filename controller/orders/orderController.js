@@ -16,24 +16,44 @@ const getAllOrders = async (req, res) => {
     }
 };
 
+const trackOrder = async (req, res) => {
+  const { Id } = req.params;
+  const awb_no = req.body.awb_no;
+  // console.log(awb_no)
+  try {
+    const data = await Order.findOne({ orderNumber: Id });
+    if (data) {
+      res.json(data);
+    } else {
+      res.status(404).json({ message: "Order not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 
 
 const getOrderById = async (req, res) => {
-    const {Id}= req.params;
-     try {
-         const orderdata = await Order.findById(Id).populate('orderDetails');
-         
-         const orderDetails=await OrderDetail.findOne({orderId:orderdata.orderId}).populate('productDetails.product')
-         console.log(orderDetails)
-         if (!orderdata) {
-             return res.status(404).json({ message: 'orderdata not found' });
-         }
-         res.json(orderDetails);
-     } catch (error) {
-         res.status(500).json({ message: error.message });
-     }
- };
+  const { Id } = req.params;
+  try {
+      const orderdata = await Order.findById(Id).populate('orderDetails');
+      if (!orderdata) {
+          return res.status(404).json({ message: 'Order data not found' });
+      }
+
+      const orderDetails = await OrderDetail.findOne({ orderId: orderdata.orderId }).populate('productDetails.product');
+      if (!orderDetails) {
+          return res.status(404).json({ message: 'Order details not found' });
+      }
+
+      res.json({ orderDetails, orderNumber: orderdata.orderNumber });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
+
 
  const getOrderDetials=  async (req, res) => {
     try {
@@ -127,9 +147,33 @@ const updateOrderStatus = async (req, res) => {
     }
   }
   
+  const orderCancellation = async (req, res) => {
+    try {
+      const { orderNumber } = req.params;
+  
+      const cancelledOrder = await Order.findOneAndUpdate(
+        { orderNumber: orderNumber },
+        { $set: { orderStatus: "Cancelled" } },
+        { new: true } // This option returns the updated document
+      );
+  
+      if (!cancelledOrder) {
+        return res.status(404).json({success:false,error:true, message: "Order not found" });
+      }
+  
+        // return res.status(404).json({success:false,error:true, message: "Order not found" });
+      return res.status(200).json({success:true,error:false, message: "Order cancelled successfully" });
+    } catch (error) {
+    
+      return res.status(500).json({success:false,error:tue, message: error.message });
+    }
+  };
+  
 
 module.exports={
     updateOrderStatus,
+    trackOrder,
+    orderCancellation,
     getAllOrders,
     getOrderById,
     getOrderDetials, 

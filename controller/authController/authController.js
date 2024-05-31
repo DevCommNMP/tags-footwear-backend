@@ -2872,6 +2872,39 @@ const login = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const adminlogin = expressAsyncHandler(async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    const userFound = await User.findOne({ email });
+ console.log(userFound)
+    if (!userFound) {
+      return res.status(401).json({ message: "Invalid Email" });
+    }
+
+    const token = await generateToken(userFound._id);
+
+    if (userFound && (await userFound.isPasswordMatched(password))&& userFound.isAdmin) {
+      res.cookie("authToken", token, { httpOnly: true }).json({
+        email: userFound.email,
+        userName: userFound.username,
+        lastName: userFound.lastName,
+        profileImage: userFound.profilePhoto,
+        isAdmin: userFound.isAdmin,
+        token: token,
+        orders:userFound.order,
+        profilePhoto:userFound.profilePhoto
+
+      });
+    } else {
+      return res.status(401).json({ message: "Invalid Password" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 const isAuthenticated = (req, res) => {
   console.log("User is authenticated");
   return;
@@ -2914,6 +2947,7 @@ module.exports = verifyAccount;
 module.exports = {
   registerUser,
   login,
+  adminlogin,
   isAuthenticated,
   verifyAccount,
   getUser,

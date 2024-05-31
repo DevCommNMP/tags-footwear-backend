@@ -4,7 +4,7 @@ const path = require('path')
 const cookieParser = require('cookie-parser');
 // Create an instance of the Express application
 const app = express();
-
+const bodyParser = require('body-parser');
 // Import and configure the dotenv library to load environment variables
 const dotenv = require("dotenv");
 dotenv.config();
@@ -17,13 +17,13 @@ const seedData=require('./seed')
 // Define an array of allowed origins
     const allowedOrigins = [
         'https://mail.google.com',
+        'https://api.tekipost.com',
+        'https://api.tekipost.com/*',
         'https://tagsfootwear.com',
         'https://admin.tagsfootwear.com',
         `http://localhost:5173`,
         `http://192.168.1.32:5173`,
         `http://localhost:5174`,
-        
-   
     ];
 
 // Define CORS middleware c bonfiguration
@@ -42,6 +42,7 @@ const corsOptions = {
 
 
 app.use(express.json());
+app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 // Use the CORS middleware with the specified options
 app.use(cors(corsOptions));
@@ -61,6 +62,7 @@ const cart=require('./routes/cartRoutes/cartRoutes')
 const checkout=require('./routes/checkoutRoutes/checkoutRoutes');
 const userRoutes=require('./routes/user/userRoutes')
 const orderRoutes=require('./routes/orderRoutes/orderRoutes')
+const queryRoutes=require('./routes/queryRoutes/queryRoutes')
 app.use('/assets/images/productImages', express.static(path.join(__dirname, 'assets/images/productImages')));
 app.use('/assets/images/productsubImages', express.static(path.join(__dirname, 'assets/images/productsubImages')));
 
@@ -76,6 +78,7 @@ app.use('/api',checkout);
 app.use('/api',subCategoriesType)
 app.use('/api',userRoutes)
 app.use('/api',orderRoutes)
+app.use('/api',queryRoutes)
 
 //allowing server to use port dynamically 
 const PORT = process.env.PORT || 5000;
