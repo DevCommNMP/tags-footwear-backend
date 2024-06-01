@@ -2875,9 +2875,8 @@ const login = expressAsyncHandler(async (req, res) => {
 const adminlogin = expressAsyncHandler(async (req, res) => {
   try {
     const { email, password } = req.body;
-    
     const userFound = await User.findOne({ email });
- console.log(userFound)
+
     if (!userFound) {
       return res.status(401).json({ message: "Invalid Email" });
     }
