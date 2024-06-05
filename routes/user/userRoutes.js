@@ -4,7 +4,7 @@ const { getUser,subscribe } = require('../../controller/userControllers/userCont
 const router = express.Router();
 
 // Route to get user details
-router.get('/user', getUser);
+router.get('/data/user', getUser);
 router.post('/subscribe',subscribe)
 
 

@@ -98,7 +98,7 @@ const updateOrderStatus = async (req, res) => {
         const decoded = jwt.verify(token, process.env.JWT_KEY);
       user = await User.findById(decoded.id);
       }
-     
+     console.log(user)
   
       // Verify the JWT token
       

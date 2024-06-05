@@ -6,10 +6,10 @@ const router = express.Router();
 
 // Route to get all orders 
 
-router.get('/orders',getAllOrders);
+router.get('/orders/getAllorders',getAllOrders);
 
 
-router.get('/orderDetails',getOrderDetials)
+router.get('/orders/getorderDetails',getOrderDetials)
 
 // // Route to get a single product by ID
 router.get('/orders/:Id', getOrderById);

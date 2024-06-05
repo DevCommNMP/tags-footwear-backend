@@ -260,6 +260,7 @@ const codCheckout = async (req, res) => {
           { new: true }
         );
       }
+      console.log("done");
 
     } catch (error) {
       console.error("Error in courierRequest:", error.message);
