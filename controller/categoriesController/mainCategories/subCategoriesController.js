@@ -17,7 +17,7 @@ const getAllSubCategories = async (req, res) => {
 
 // Controller function to get a single subCategory by ID
 const getsubCategoryById = async (req, res) => {
-  console.log(req.params.Id);
+  // console.log(req.params.Id);
   try {
     const subcategory = await SubCategories.findById(req.params.Id);
   

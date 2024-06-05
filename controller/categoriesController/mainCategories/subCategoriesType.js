@@ -1,18 +1,21 @@
 const subCategoriesTypes=require('../../../modals/category/subCategorytype')
-const categories=require('../../../modals/category/subCategories')
+const categories=require('../../../modals/category/subCategories');
+const Product = require('../../../modals/product/product');
 
 
 // Controller function to get all categories
-const getAllSubCategoriesTypes = async (req, res) => {
 
+
+const getSubCategoriesTypes=async(req,res)=>{
   try {
-    const subCategoryTypes = await subCategoriesTypes.find(); // Use the correct model
-    res.status(200).json(subCategoryTypes);
-  } catch (error) {
-    console.error('Error getting subcategory types:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-};
+    const products = await subCategoriesTypes.find({})
+    res.json(products);
+} catch (error) {
+    // Handle error, log, etc.
+    console.error('Error finding subCategoryTypes:', error);
+    throw error;
+}
+}
 
 
 
@@ -84,7 +87,7 @@ const deletesubCategoryType = async (req, res) => {
 };
 
 module.exports = {
-  getAllSubCategoriesTypes,
+  getSubCategoriesTypes,
   getsubCategoryTypesById,
   createsubCategoryTypes,
   updatesubCategoryType,

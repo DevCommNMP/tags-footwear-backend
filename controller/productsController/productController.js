@@ -27,6 +27,33 @@ const product = await Product.findById(id);
     }
 };
 
+
+// get product varienst
+const getProductByVariants = async (req, res) => {
+    const { id } = req.params;
+    console.log(id);
+
+    try {
+        // Finding a product by its ID
+        const product = await Product.findById(id);
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        const productNameParts = product.productName.split('-'); 
+        const joinPartsName = productNameParts.slice(0, productNameParts.length - 1).join('-');
+
+        // Finding products with similar names
+        const data = await Product.find({ productName: { $regex: joinPartsName, $options: 'i' } }); 
+        console.log(data);
+
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 // Controller function to create a product by ID
 const createProduct = async (req, res) => {
     console.log(req.body)
@@ -154,30 +181,27 @@ const uploadProductImage = async (req, res) => {
     }
   };
   
+
+  const getProductsByCategory = async (req, res) => {
+    
+    const {categoryName}=req.params;
+    
+    try {
+        const products = await Product.find().populate('category subcategory subcategoryType');
+       
+        const filteredProducts = products.filter(item => item.subcategory && item.subcategory.subcategoriesName === categoryName);
+        res.json(filteredProducts);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 module.exports = {
     getProductById,
     createProduct,
+    getProductsByCategory,
     updateProduct,
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    getProductByVariants,
     deleteProduct,
     getAllProducts,
     uploadProductImage,

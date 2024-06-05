@@ -1901,20 +1901,8 @@ const dummyData =
 
 const seedData = async () => {
   try {
-    const products = await Product.find();
 
-    // Loop through each product and update the discount field
-    for (let product of products) {
-      // Calculate the discount (assuming some logic here)
-     
-      // Update the discount field for the product
-      product.discount =40;
-
-      // Save the updated product back to the database
-      await product.save();
-    }
-    // await Product.insertMany(dummyData);
-    console.log("Dummy data generated successfully");
+    console.log("Server is healthy");
   } catch (error) {
     console.error("Error generating dummy data:", error);
   }

@@ -5,8 +5,9 @@ const router = express.Router();
 const {getAllProducts,getProductById,
     createProduct,
     updateProduct,
+    getProductByVariants,
     uploadProductImage,
-    deleteProduct,uploadproductSubImages} = require('../../controller/productsController/productController');
+    deleteProduct,uploadproductSubImages,getProductsByCategory} = require('../../controller/productsController/productController');
 
     const productImageUpload=require('../../config/multerConfig/productImageUpload')
     const uploadSubImages=require('../../config/multerConfig/productSubimagesUplaod')
@@ -27,12 +28,13 @@ router.post('/products/subImages/:Id', uploadSubImages.array("productSubImages")
 // Route to get a single product by ID
 router.get('/products/:id', getProductById);
 
+router.get('/allproductVarients/:id', getProductByVariants);
 //Route to update a particular product
 router.put('/products/:id', updateProduct);
 
 //Route to delete a particular post by Id
 router.delete('/products/:Id', deleteProduct);
-
+router.get('/:categoryName', getProductsByCategory);
 // Other routes for creating, updating, and deleting products can be added here
 
 module.exports = router;

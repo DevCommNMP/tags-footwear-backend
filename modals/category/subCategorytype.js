@@ -7,11 +7,6 @@ const subcategoryTypeSchema = new mongoose.Schema({
     unique: true, // Ensure uniqueness of subcategoryTypeName
   },
   
-  icon: {
-    type: String,
-    // required: true
-  },
-  color: String
 });
 
 const subCategoryType = mongoose.model('subCategoryType', subcategoryTypeSchema);

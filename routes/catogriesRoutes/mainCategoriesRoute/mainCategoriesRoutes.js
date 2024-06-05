@@ -1,24 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const {getAllCategories,
-    getCategoryById,
-    createCategory,
-    updateCategory,
-    deleteCategory} = require('../../../controller/categoriesController/mainCategories/mainCategories')
+const {  getAllSubCategories,
+    getsubCategoryById,
+    createsubCategory,
+    updatesubCategory,
+    deletesubCategory} = require('../../../controller/categoriesController/mainCategories/subCategoriesController')
 
 // Route to create a new category
-router.post('/categories', createCategory);
+router.post('/subCategories', createsubCategory);
 
 // Route to get all categories
-router.get('/categories', getAllCategories);
+router.get('/categories', getAllSubCategories);
 
 // Route to get a category by ID
-router.get('/categories/:Id', getCategoryById);
+router.get('/subCategories/:Id', getsubCategoryById);
 
 // Route to update a category by ID
-router.put('/categories/:Id', updateCategory);
+router.put('/subCategories/:Id', updatesubCategory);
 
 // Route to delete a category by ID
-router.delete('/categories/:Id', deleteCategory);
+router.delete('/subCategories/:Id', deletesubCategory);
 
-module.exports = router;
+module.exports = router;
