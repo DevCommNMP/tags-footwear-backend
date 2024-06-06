@@ -10,6 +10,16 @@ const getAllProducts = async (req, res) => {
     }
 };
 
+
+const getPremiumLeather = async (req, res) => {
+    try {
+        const products = await Product.find({ isPremiumLeather: true })
+        res.json(products);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 // Get product by ID
 const getProductById = async (req, res) => {
    const {id}= req.params;
@@ -199,6 +209,7 @@ const uploadProductImage = async (req, res) => {
 module.exports = {
     getProductById,
     createProduct,
+    getPremiumLeather,
     getProductsByCategory,
     updateProduct,
     getProductByVariants,

@@ -7,6 +7,7 @@ const {getAllProducts,getProductById,
     updateProduct,
     getProductByVariants,
     uploadProductImage,
+    getPremiumLeather,
     deleteProduct,uploadproductSubImages,getProductsByCategory} = require('../../controller/productsController/productController');
 
     const productImageUpload=require('../../config/multerConfig/productImageUpload')
@@ -17,6 +18,7 @@ const {getAllProducts,getProductById,
 
 // Route to get all products
 router.get('/products', getAllProducts);
+router.get('/products/premium-leather', getPremiumLeather);
 // Route to create  prodduct 
 router.post('/products', createProduct);
 //  upload product Image 
