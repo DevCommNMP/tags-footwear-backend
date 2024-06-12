@@ -91,21 +91,7 @@ default:false
     type:String,
   },
   rating: Number,
-  // reviews: [
-  //   {
-  //     userId: {
-  //       type: mongoose.Schema.Types.ObjectId,
-  //       ref: "User",
-  //       required: true,
-  //     },
-  //     rating: {
-  //       type: Number,
-  //       required: true,
-  //     },
-  //     comment: String,
-  //     createdAt: { type: Date, default: Date.now },
-  //   },
-  // ],
+
   createdAt: { type: Date, default: Date.now },
   modifiedAt: { type: Date, default: Date.now },
 },{ strictPopulate: false });
