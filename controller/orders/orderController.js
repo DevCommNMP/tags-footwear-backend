@@ -151,7 +151,7 @@ const updateOrderStatus = async (req, res) => {
     try {
       const { orderNumber } = req.params;
   
-      const cancelledOrder = await Order.findOneAndUpdate(
+      constchcancelledOrder = await Order.findOneAndUpdate(
         { orderNumber: orderNumber },
         { $set: { orderStatus: "Cancelled" } },
         { new: true } // This option returns the updated document

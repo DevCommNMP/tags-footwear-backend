@@ -10,7 +10,7 @@ const instance = new Razorpay({
   key_id: process.env.RAZORPAY_API_KEY,
   key_secret: process.env.RAZORPAY_SECRET,
 });
-
+ const Product= require("../../modals/product/product")
 var email = process.env.courierEmail;
 var password = process.env.courierPassword;
 
@@ -171,6 +171,8 @@ const codCheckout = async (req, res) => {
       quantity += item.quantity; // Accumulate quantity
     });
 
+    // console.log("body77777777777",req.body)
+
     const products = req.body.cartdata.map((item) => ({
       product: item.productId,
       quantity: item.quantity,
@@ -178,6 +180,7 @@ const codCheckout = async (req, res) => {
       size: item.size,
       color: item.color,
     }));
+    // console.log("products................",products)
 
     const orderDetails = await OrderDetail.create({
       orderId: placedOrder.orderId,
@@ -271,7 +274,7 @@ const codCheckout = async (req, res) => {
       { $set: { orderDetails: OrderDetaitlsData._id }},
       { new: true }
     );
-    console.log(modifyOrderData)
+    // console.log(modifyOrderData)
     const orderData = await Order.findOneAndUpdate(
       { orderId: modifyOrderData.orderId },
       {
@@ -282,6 +285,58 @@ const codCheckout = async (req, res) => {
       },
       { new: true }
     );
+
+  //   const productmodification = await Promise.all(req.body.cartdata.map(async (item) => {
+  //     try {
+  //         // Find the product by its ID
+  //         const foundProduct = await Product.findById(item.productId);
+          
+  //         // Check if the product is found
+  //         if (foundProduct) {
+  //             // Find the index of the size in the product's sizes array
+  //             const sizeIndex = foundProduct.sizesAvailable.findIndex(sizeObj => sizeObj.size === item.size);
+              
+  //             // Check if the size exists in the product's sizes
+  //             if (sizeIndex !== -1) {
+  //                 // Update the quantity of the size
+  //                 if (foundProduct.sizesAvailable[sizeIndex].quantity > 0) {
+  //                     foundProduct.sizesAvailable[sizeIndex].quantity -= item.quantity;
+  //                     // Save the changes to the database
+  //                     await foundProduct.save();
+  //                     return { success: true, message: `Quantity updated for size ${item.size} in product ${item.productId}` };
+  //                 } else {
+  //                     console.log(`Insufficient quantity for size ${item.size} in product ${item.productId}`);
+  //                     return { success: false, message: `Insufficient quantity for size ${item.size} in stock` };
+  //                 }
+  //             } else {
+  //                 console.log(`Size ${item.size} not found for product ${item.productId}`);
+  //                 return { success: false, message: `Size ${item.size} not found for product ${item.productId}` };
+  //             }
+  //         } else {
+  //             console.log(`Product ${item.productId} not found`);
+  //             return { success: false, message: `Product ${item.productId} not found` };
+  //         }
+  //     } catch (error) {
+  //         console.error("Error while processing product: ", error);
+  //         return { success: false, message: "Something went wrong, try again later!" };
+  //     }
+  // }));
+  
+  // Now productmodification array contains response objects indicating success or failure for each product modification
+  
+  
+  // Filter out any null values (products that were not found or had insufficient quantity)
+  const validProducts = productmodification.filter(product => product !== null);
+  
+  // Now you can use the validProducts array for further processing or saving to the database
+  
+  
+  // Wait for all products to be updated and return the updated products array
+  const updatedProducts = await Promise.all(productmodification);
+  
+  console.log(updatedProducts)
+  // Do something with updatedProducts if needed
+  
    
     const updateUserData = await User.findOneAndUpdate(
       { email: email },
@@ -362,48 +417,48 @@ const{ CGST,
    const orderdata= await Order.findOne({orderId:placedOrder.orderId})
    console.log("====================",orderdata)
    const OrderDetaitlsData= await OrderDetail.findOne({orderId:orderdata.orderId})
-console.log("00000000000000000000000",OrderDetaitlsData)
+// console.log("00000000000000000000000",OrderDetaitlsData)
    const courierRequest = async () => {
     try {
-      // const response = await axios.post(
-      //   'https://api.tekipost.com/connect/order-ship',
-      //   {
-      //     // invoice_no:order
-      //     order_no: orderdata.orderNumber, // Change to orderId
-      //     customer_name: formData.fname + ' ' + formData.lname,
-      //     customer_address_1: formData.billing_address,
-      //     customer_address_2: formData.billing_address2,
-      //     customer_pincode: formData.zipcode,
-      //     customer_city: formData.city,
-      //     customer_state: formData.state,
-      //     customer_mobile_no: formData.phone,
-      //     customer_alt_no: "",
-      //     customer_email: formData.email,
-      //     product_category: "Fashion & lifestyle",
-      //     product_code: productCode,
-      //     product_name: productName,
-      //     product_qty: quantity, // Use accumulated quantity
-      //     invoice_value: amount,
-      //     cod_value: "0",
-      //     weight_in_kgs: `${0.8*quantity}`,
-      //     length_in_cms: `${28*quantity}`,
-      //     breadth_in_cms: `${14*quantity}`,
-      //     height_in_cms: `${28*quantity}`,
-      //     warehouse_id: "589",
-      //     movement_type: "Forward",
-      //     store_id: "59",
-      //     courier_id: "",
-      //     custom_awb_no: "",
-      //     service_name: "Surface",
-      //   },
-      //   {
-      //     headers: {
-      //       'Authorization': `Bearer ${encodedCredentials}`,
-      //     },
-      //   }
-      // );
+      const response = await axios.post(
+        'https://api.tekipost.com/connect/order-ship',
+        {
+          // invoice_no:order
+          order_no: orderdata.orderNumber, // Change to orderId
+          customer_name: formData.fname + ' ' + formData.lname,
+          customer_address_1: formData.billing_address,
+          customer_address_2: formData.billing_address2,
+          customer_pincode: formData.zipcode,
+          customer_city: formData.city,
+          customer_state: formData.state,
+          customer_mobile_no: formData.phone,
+          customer_alt_no: "",
+          customer_email: formData.email,
+          product_category: "Fashion & lifestyle",
+          product_code: productCode,
+          product_name: productName,
+          product_qty: quantity, // Use accumulated quantity
+          invoice_value: amount,
+          cod_value: "0",
+          weight_in_kgs: `${0.8*quantity}`,
+          length_in_cms: `${28*quantity}`,
+          breadth_in_cms: `${14*quantity}`,
+          height_in_cms: `${28*quantity}`,
+          warehouse_id: "589",
+          movement_type: "Forward",
+          store_id: "59",
+          courier_id: "",
+          custom_awb_no: "",
+          service_name: "Surface",
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${encodedCredentials}`,
+          },
+        }
+      );
       
-      // return response.data;
+      return response.data;
       console.log("orderplaced on tekipost")
     } catch (error) {
       throw error;
@@ -419,7 +474,7 @@ console.log(response);
         { new: true }
       );
     }
-    console.log(orderplaced);
+    // console.log(orderplaced);
 
   } catch (error) {
     console.error("Error in courierRequest:", error.message);
@@ -452,7 +507,7 @@ console.log(response);
 
 const pincodeData = (req, res) => {
   const { pincode } = req.body;
-  // res.json(pincode);
+  //console.log(pincode);
   const data = query.search(pincode);
   // console.log(data);
   if (data.length == 0) {
