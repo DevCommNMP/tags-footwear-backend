@@ -124,7 +124,7 @@ require:true,
 // Pre-save hook to generate order number
 orderSchema.pre('save', async function(next) {
   try {
-    const prefix = 'TF00'; // Prefix for the order number
+    const prefix = 'TF000'; // Prefix for the order number
     const sequenceValue = await getNextSequenceValue(prefix);
     this.orderNumber = `${prefix}${sequenceValue.toString().padStart(3, '0')}`; // Format the sequence value
     next(); // Proceed to save the document
