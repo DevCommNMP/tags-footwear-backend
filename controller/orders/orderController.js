@@ -150,12 +150,14 @@ const updateOrderStatus = async (req, res) => {
   const orderCancellation = async (req, res) => {
     try {
       const { orderNumber } = req.params;
-  
-      constchcancelledOrder = await Order.findOneAndUpdate(
+      console.log(orderNumber)
+  // console.log(orderNumber)
+      const cancelledOrder = await Order.findOneAndUpdate(
         { orderNumber: orderNumber },
         { $set: { orderStatus: "Cancelled" } },
         { new: true } // This option returns the updated document
       );
+  
   
       if (!cancelledOrder) {
         return res.status(404).json({success:false,error:true, message: "Order not found" });
@@ -165,7 +167,7 @@ const updateOrderStatus = async (req, res) => {
       return res.status(200).json({success:true,error:false, message: "Order cancelled successfully" });
     } catch (error) {
     
-      return res.status(500).json({success:false,error:tue, message: error.message });
+      return res.status(500).json({success:false,error:true, message: error.message });
     }
   };
   
