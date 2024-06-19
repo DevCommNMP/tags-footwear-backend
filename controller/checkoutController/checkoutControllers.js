@@ -430,71 +430,71 @@ const checkout = async (req, res) => {
       orderId: orderdata.orderId,
     });
     // console.log("00000000000000000000000",OrderDetaitlsData)
-    // const courierRequest = async () => {
-    //   try {
-    //     const response = await axios.post(
-    //       "https://api.tekipost.com/connect/order-ship",
-    //       {
-    //         // invoice_no:order
-    //         order_no: orderdata.orderNumber, // Change to orderId
-    //         customer_name: formData.fname + " " + formData.lname,
-    //         customer_address_1: formData.billing_address,
-    //         customer_address_2: formData.billing_address2,
-    //         customer_pincode: formData.zipcode,
-    //         customer_city: formData.city,
-    //         customer_state: formData.state,
-    //         customer_mobile_no: formData.phone,
-    //         customer_alt_no: "",
-    //         customer_email: formData.email,
-    //         product_category: "Fashion & lifestyle",
-    //         product_code: productCode,
-    //         product_name: productName,
-    //         product_qty: quantity, // Use accumulated quantity
-    //         invoice_value: amount,
-    //         cod_value: "0",
-    //         weight_in_kgs: `${0.8 * quantity}`,
-    //         length_in_cms: `${28 * quantity}`,
-    //         breadth_in_cms: `${14 * quantity}`,
-    //         height_in_cms: `${28 * quantity}`,
-    //         warehouse_id: "589",
-    //         movement_type: "Forward",
-    //         store_id: "59",
-    //         courier_id: "",
-    //         custom_awb_no: "",
-    //         service_name: "Surface",
-    //       },
-    //       {
-    //         headers: {
-    //           Authorization: `Bearer ${encodedCredentials}`,
-    //         },
-    //       }
-    //     );
+    const courierRequest = async () => {
+      try {
+        const response = await axios.post(
+          "https://api.tekipost.com/connect/order-ship",
+          {
+            // invoice_no:order
+            order_no: orderdata.orderNumber, // Change to orderId
+            customer_name: formData.fname + " " + formData.lname,
+            customer_address_1: formData.billing_address,
+            customer_address_2: formData.billing_address2,
+            customer_pincode: formData.zipcode,
+            customer_city: formData.city,
+            customer_state: formData.state,
+            customer_mobile_no: formData.phone,
+            customer_alt_no: "",
+            customer_email: formData.email,
+            product_category: "Fashion & lifestyle",
+            product_code: productCode,
+            product_name: productName,
+            product_qty: quantity, // Use accumulated quantity
+            invoice_value: amount,
+            cod_value: "0",
+            weight_in_kgs: `${0.8 * quantity}`,
+            length_in_cms: `${28 * quantity}`,
+            breadth_in_cms: `${14 * quantity}`,
+            height_in_cms: `${28 * quantity}`,
+            warehouse_id: "589",
+            movement_type: "Forward",
+            store_id: "59",
+            courier_id: "",
+            custom_awb_no: "",
+            service_name: "Surface",
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${encodedCredentials}`,
+            },
+          }
+        );
 
-    //     return response.data;
-    //     console.log("orderplaced on tekipost");
-    //   } catch (error) {
-    //     throw error;
-    //   }
-    // };
-    // try {
-    //   const response = await courierRequest();
-    //   console.log(response);
-    //   if (!response.error) {
-    //     const modifyOrderData = await Order.findOneAndUpdate(
-    //       { orderId: placedOrder.orderId },
-    //       {
-    //         $set: {
-    //           order_id: response.order_id,
-    //           orderDetails: OrderDetaitlsData._id, 
-    //         },
-    //       },
-    //       { new: true }
-    //     );
-    //   }
-    //   // console.log(orderplaced);
-    // } catch (error) {
-    //   console.error("Error in courierRequest:", error.message);
-    // }
+        return response.data;
+        console.log("orderplaced on tekipost");
+      } catch (error) {
+        throw error;
+      }
+    };
+    try {
+      const response = await courierRequest();
+      console.log(response);
+      if (!response.error) {
+        const modifyOrderData = await Order.findOneAndUpdate(
+          { orderId: placedOrder.orderId },
+          {
+            $set: {
+              order_id: response.order_id,
+              orderDetails: OrderDetaitlsData._id, 
+            },
+          },
+          { new: true }
+        );
+      }
+      // console.log(orderplaced);
+    } catch (error) {
+      console.error("Error in courierRequest:", error.message);
+    }
 
     const modifyOrderData = await Order.findOneAndUpdate(
       { orderId: placedOrder.orderId },
