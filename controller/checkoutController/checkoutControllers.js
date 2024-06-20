@@ -391,18 +391,42 @@ const paymentVerification = async (req, res) => {
   if (isAuthentic) {
     try {
       // Create payment record
-      await Payment.create({
+    const data= await Payment.create({
         razorpay_order_id,
         razorpay_payment_id,
         razorpay_signature,
       });
+      // console.log(data)
+      //capturing payment data
+      const captureResponse = await axios.get(
+        `https://api.razorpay.com/v1/payments/${razorpay_payment_id}`,
+        {
+          auth: {
+            username: process.env.RAZORPAY_API_KEY, // Replace with your Razorpay API key
+            password: process.env.RAZORPAY_SECRET // Replace with your Razorpay API secret stored in environment variable
+          }
+        }
+      );
+      
+      let paymentType;
+      if (captureResponse.data.method === 'upi') {
+        paymentType = "UPI";
+      } else if (captureResponse.data.method === 'card') {
+        paymentType = `${captureResponse.data.card.network} ${captureResponse.data.card.type} Card`;
+      } else if (captureResponse.data.method === 'netbanking') {
+        paymentType = "Netbanking";
+      } else {
+        paymentType = "";
+      }
 
-      // Update order payment status
+
+      // / Update order payment status
       const orderData = await Order.findOneAndUpdate(
         { razorpay_order_id },
         {
           $set: {
             PaymentStatus: "Paid",
+            paymentMethod:paymentType,
             paymentDetails: {
               razorpay_order_id,
               razorpay_payment_id,
@@ -413,7 +437,7 @@ const paymentVerification = async (req, res) => {
         { new: true }
       );
 
-      // Prepare data for courier request
+     
       const courierData = {
         order_no: OrderData.orderNumber, // Change to orderId
             customer_name: BillingData.fname + " " + BillingData.lname,
@@ -454,7 +478,7 @@ const paymentVerification = async (req, res) => {
         }
       );
 
-      console.log("Order placed on tekipost", courierData);
+      // console.log("Order placed on tekipost", courierData);
 
          const productmodification = await Promise.all(
       ProductData.map(async (item) => {
@@ -514,7 +538,7 @@ const paymentVerification = async (req, res) => {
     // Wait for all products to be updated and return the updated products array
     const updatedProducts = await Promise.all(productmodification);
 
-    console.log("products updated successfully");
+    // console.log("products updated successfully");
     // console.log(updateUserData)
       // Redirect to success page
       res.redirect(`${process.env.BASE_URL}/paymentsuccess?reference=${razorpay_payment_id}`);

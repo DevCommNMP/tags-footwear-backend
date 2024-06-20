@@ -53,6 +53,9 @@ const orderSchema = new mongoose.Schema({
   aggregator_shipment_id :{
     type:String,
   },
+  paymentMethod:{
+type:String,
+  },
   courier_id:{
     type:Number,
   },
