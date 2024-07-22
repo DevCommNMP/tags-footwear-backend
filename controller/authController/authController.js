@@ -32,6 +32,7 @@ const registerUser = expressAsyncHandler(async (req, res) => {
         pass: "ddle kjkt haxu vfmz",
       },
     });
+    
 
     const mailOptions = {
       from: {

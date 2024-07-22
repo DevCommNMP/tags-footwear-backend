@@ -33,7 +33,7 @@ const orderSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    
   },
   merchant_id :{
     type:Number,
@@ -88,7 +88,6 @@ require:true,
   },
   orderNumber: {
     type: String,
-   
     unique: true
   },
  invoice_no:{
