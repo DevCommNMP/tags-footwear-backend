@@ -1781,7 +1781,7 @@ const paymentVerification = async (req, res) => {
 
      
       const courierData = {
-        order_no: OrderData.orderNumber, // Change to orderId
+        order_no: orderData.orderNumber, // Change to orderId
             customer_name: BillingData.fname + " " + BillingData.lname,
             customer_address_1: BillingData.billing_address,
             customer_address_2: BillingData.billing_address2,
