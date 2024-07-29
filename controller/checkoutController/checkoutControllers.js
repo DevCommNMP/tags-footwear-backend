@@ -1184,11 +1184,9 @@ const codCheckout = async (req, res) => {
                                           "
                                         >
                                           <p style="margin: 0">
-                                            Since 1976, we are providing curtains
-                                            cloth, sofa fabric and furniture
-                                            refreshing services in South Extension,
-                                            New Delhi. In the year 2026, we will be
-                                            celebrating the golden jubilee 50th year.
+                                Welcome to TagsFootwear, where every step matters. Our passion is to provide exquisite footwear that seamlessly blends style, comfort, and quality.
+
+
                                           </p>
                                           <ul>
                                                                                   <li>
@@ -1295,7 +1293,7 @@ const codCheckout = async (req, res) => {
                                               >
                                               <span
                                                 id="c2e0ec35-b4ce-44fc-9c78-fa5cec49c8ec"
-                                                >@2023</span
+                                                ></span
                                               ></span
                                             >
                                           </p>
@@ -1445,7 +1443,7 @@ const codCheckout = async (req, res) => {
                                                     "
                                                   >
                                                     <a
-                                                      href="https://www.designedwithbee.com/"
+                                                      href="https://github.com/Aaditya2763/"
                                                       style="
                                                         color: #9d9d9d;
                                                         text-decoration: none;
@@ -1453,7 +1451,7 @@ const codCheckout = async (req, res) => {
                                                       target="_blank"
                                                       >Developed & Designed by:
                                                       <strong
-                                                        >Prince Sachdeva</strong
+                                                        >Aditya Singh</strong
                                                       ></a
                                                     >
                                                   </td>
@@ -2836,11 +2834,7 @@ const paymentVerification = async (req, res) => {
                                             "
                                           >
                                             <p style="margin: 0">
-                                              Since 1976, we are providing curtains
-                                              cloth, sofa fabric and furniture
-                                              refreshing services in South Extension,
-                                              New Delhi. In the year 2026, we will be
-                                              celebrating the golden jubilee 50th year.
+                                              Welcome to TagsFootwear, where every step matters. Our passion is to provide exquisite footwear that seamlessly blends style, comfort, and quality.
                                             </p>
                                             <ul>
                                                                                     <li>
@@ -2947,7 +2941,7 @@ const paymentVerification = async (req, res) => {
                                                 >
                                                 <span
                                                   id="c2e0ec35-b4ce-44fc-9c78-fa5cec49c8ec"
-                                                  >@2023</span
+                                                  ></span
                                                 ></span
                                               >
                                             </p>
@@ -3097,7 +3091,7 @@ const paymentVerification = async (req, res) => {
                                                       "
                                                     >
                                                       <a
-                                                        href="https://www.designedwithbee.com/"
+                                                        href="https://github.com/Aaditya2763/"
                                                         style="
                                                           color: #9d9d9d;
                                                           text-decoration: none;
@@ -3105,7 +3099,7 @@ const paymentVerification = async (req, res) => {
                                                         target="_blank"
                                                         >Developed & Designed by:
                                                         <strong
-                                                          >Prince Sachdeva</strong
+                                                          >Aditya Singh</strong
                                                         ></a
                                                       >
                                                     </td>

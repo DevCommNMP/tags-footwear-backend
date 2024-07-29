@@ -82,7 +82,7 @@ app.use('/api',orderRoutes)
 app.use('/api',queryRoutes)
 
 //allowing server to use port dynamically 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 
 // Define a route for the root URL ("/") to send a JSON response with a message indicating the server is running
 app.get("/", (req, res) => {
