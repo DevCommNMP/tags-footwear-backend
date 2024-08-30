@@ -5,7 +5,7 @@ const SubCategories = require('../../../modals/category/subCategories'); // Adju
 
 // Controller function to get all categories
 const getAllSubCategories = async (req, res) => {
-  console.log("updating the data")
+  // console.log("updating the data")
   try {
     const categories = await SubCategories.find({});
     res.status(200).json(categories);

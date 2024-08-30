@@ -45,10 +45,55 @@ const subscribe = async (req, res) => {
 };
 
 
+const getOtpData=async(req,res)=>{
 
+ try {
+  const {phoneNumber}=req.body;
+  console.log(phoneNumber)
+  const otpdata=await User.findOne({phoneNumber:phoneNumber})
+  res.status(201).json({error:false,otpdata,success:true})
+ } catch (error) {
+  res.status(200).json({error:true,message:error.message,success:false})
+ }
+}
+
+const verifyOtp = async (req, res) => {
+  const { phoneNumber, otp } = req.body;
+
+  if (!phoneNumber || !otp) {
+    return res.status(400).json({ success: false, error: true, message: "Phone number and OTP are required" });
+  }
+
+  try {
+    // Find user by phone number
+    const user = await User.findOne({ phoneNumber });
+
+    if (!user) {
+      return res.status(404).json({ success: false, error: true, message: "User not found" });
+    }
+
+    // Check if the OTP is correct
+    if (user.otp !== otp) {
+      return res.status(400).json({ success: false, error: true, message: "Invalid OTP" });
+    }
+
+   
+
+    // Clear OTP after successful verification
+    user.otp = ""; // Clear the OTP
+    await user.save();
+
+    res.status(200).json({ success: true, error: false, message: "OTP verified successfully" });
+  } catch (error) {
+    console.error("Error verifying OTP:", error);
+    res.status(500).json({ success: false, error: true, message: "Server error: " + error.message });
+  }
+};
   module.exports={
     getUser,
-    subscribe
+    subscribe,
+    verifyOtp,
+    getOtpData
   }
 
 

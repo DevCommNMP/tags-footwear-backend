@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const {authMiddleware} =require('../../middleware/isAuthenticated/isAuthenticated')
-const { registerUser, login,adminlogin, isAuthenticated ,verifyAccount,passwordResetMail,getUser,verifyForgotPasswordToken,updatePassword} = require('../../controller/authController/authController');
+const { registerUser, login,adminlogin, isAuthenticated ,sendOTP,verifyAccount,passwordResetMail,getUser,verifyForgotPasswordToken,updatePassword} = require('../../controller/authController/authController');
 const {sendmail}=require('../../apis/sendmail')
 /*------------------------register routes--------------------------------*/
 // Registering user
 router.post('/auth/register', registerUser);
-
+// router.post('/sendotp',sendOTP)
 /*------------------------login routes--------------------------------*/
 // User login route
 router.post('/auth/login', login);

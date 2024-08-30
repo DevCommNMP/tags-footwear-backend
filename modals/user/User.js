@@ -32,6 +32,13 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Email is required'],
         type: String,
     },
+    phoneNumber:{
+        type:String,
+        // required:[true,"Phone Number is required"],
+    },
+    otp:{
+        type:String,
+    },
     username:{
         required:[true,"Username is required"],
         type:String,
