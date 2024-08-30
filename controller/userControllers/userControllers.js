@@ -1,5 +1,14 @@
 const Subscriber = require("../../modals/subscriber/subscriber");
 const User = require("../../modals/user/User");
+const { sendOtp } = require("../sendotp/sendOTP");
+
+
+const generateOtp = () => {
+  // Generate a random number between 100000 and 999999
+  const otp = Math.floor(100000 + Math.random() * 900000);
+  return otp.toString();
+};
+
 
 const getUser = async (req, res) => {
   try {
@@ -89,10 +98,48 @@ const verifyOtp = async (req, res) => {
     res.status(500).json({ success: false, error: true, message: "Server error: " + error.message });
   }
 };
+
+
+const resendOtp = async (req, res) => {
+  const { phoneNumber } = req.body;
+console.log(phoneNumber)
+  if (!phoneNumber) {
+      return res.status(400).json({ success: false, message: 'Phone number is required.' });
+  }
+
+  try {
+      // Find user by phone number
+      const user = await User.findOne({ phoneNumber:phoneNumber });
+      if (!user) {
+          return res.status(404).json({ success: false, message: 'User not found.' });
+      }
+
+      // Generate new OTP
+      const newOtp = generateOtp();
+
+      // Update user's OTP in the database
+      user.otp = newOtp;
+      await user.save();
+     
+   await sendOtp(phoneNumber,newOtp)
+      // Send the OTP via SMS
+    
+
+      return res.status(200).json({ success: true, message: 'OTP sent successfully.' });
+
+  } catch (error) {
+      console.error('Error resending OTP:', error.message);
+      return res.status(500).json({ success: false, message: 'Internal server error.' });
+  }
+};
+
+
+
   module.exports={
     getUser,
     subscribe,
     verifyOtp,
+    resendOtp,
     getOtpData
   }
 
