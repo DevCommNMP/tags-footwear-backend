@@ -14,7 +14,7 @@ const sendOtp = async (recipientPhoneNumber, otp) => {
 
         const message = await client.messages.create({
             body: `Your OTP is ${otp}`,
-            from:'+18082022652',// Use the Twilio phone number from the environment variable
+            from:'+18082022652',
             to: `+${recipientPhoneNumber}`
         });
 
