@@ -49,7 +49,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));
 app.use(express.static('assets'));
 dbConnect()
-seedData();
+// seedData();
 // Define the port number to listen on, using the environment variable PORT or default to 5000
 const authRoute=require('./routes/authRoutes/authRoute');
 const productsRoute=require('./routes/productRoutes/productsRoutes');
