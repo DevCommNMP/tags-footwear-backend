@@ -412,6 +412,36 @@ const checkUniqueTitles = async (req, res) => {
 //   }
 // };
 
+
+const bulkDiscountController = async (req, res) => {
+  const { discount } = req.body;
+
+  try {
+    // Update all products, setting the discount field to the provided value
+    const updatedProducts = await Product.updateMany({}, { discount });
+
+    // Fetch all products to verify the updates
+    const allProducts = await Product.find(); // Fetch all fields
+
+    // Log all products with serial number and discount
+    allProducts.forEach((product, index) => {
+      console.log(`${index + 1}. Product ID: ${product._id}, Discount: ${product.discount}`);
+    });
+
+    // Return a response to the client
+    res.status(200).json({
+      message: `${updatedProducts.matchedCount} products were found and updated with a discount of ${discount}.`,
+      updatedCount: updatedProducts.modifiedCount,
+      products: allProducts // Optional: include all products in the response if needed
+    });
+  } catch (error) {
+    // Handle any errors that occur during the update
+    console.error("Error updating or fetching data:", error.message);
+    res.status(500).json({ message: "Error updating products", error: error.message });
+  }
+};
+
+
 module.exports = {
   getProductById,
   createProduct,
@@ -425,4 +455,5 @@ module.exports = {
   uploadproductSubImages,
   checkUniqueTitles,
   getProductBySlug,
+  bulkDiscountController
 };

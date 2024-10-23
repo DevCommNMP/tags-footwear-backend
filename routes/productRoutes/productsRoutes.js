@@ -9,6 +9,7 @@ const {getAllProducts,getProductById,checkUniqueTitles,
     uploadProductImage,
     getPremiumLeather,
     getProductBySlug,
+    bulkDiscountController,
     deleteProduct,uploadproductSubImages,getProductsByCategory} = require('../../controller/productsController/productController');
 
     const productImageUpload=require('../../config/multerConfig/productImageUpload')
@@ -27,7 +28,7 @@ router.post('/products/:Id', productImageUpload.single("productImage"), uploadPr
 
 //  upload product Image 
 router.post('/products/subImages/:Id', uploadSubImages.array("productSubImages"), uploadproductSubImages);
-
+router.post('/v1/bulkDiscount/',bulkDiscountController)
 // Route to get a single product by ID
 router.get('/products/:id', getProductById);
 

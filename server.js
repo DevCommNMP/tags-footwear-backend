@@ -21,6 +21,7 @@ const seedData=require('./seed')
         'https://api.tekipost.com/*',
         'https://tagsfootwear.com',
         'https://admin.tagsfootwear.com',
+        'http://localhost:5173'
       ,
     ];
 
@@ -46,7 +47,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));
 app.use(express.static('assets'));
 dbConnect()
-// seedData();
+
 // Define the port number to listen on, using the environment variable PORT or default to 5000
 const authRoute=require('./routes/authRoutes/authRoute');
 const productsRoute=require('./routes/productRoutes/productsRoutes');

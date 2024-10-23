@@ -26744,19 +26744,32 @@ const Data=[
   ]
 // Define seedData function
 async function seedData() {
-    try {
-        // Insert multiple products into the database
-        const insertedProducts = await Product.insertMany(Data);
+  try {
+    // Update all products, setting the discount field to 50
+    const updatedProducts = await Product.updateMany({}, { discount: 50 });
     
-        // Log success or return inserted products
-        console.log(`${insertedProducts.length} products have been successfully seeded.`);
-        return insertedProducts; // Optional, return the inserted data if needed
-      } catch (error) {
-        // Handle any errors that occur during insertion
-        console.error("Error seeding data:", error.message);
-        throw error; // You can rethrow the error if needed
-      }
+    // Log the number of matched and modified products
+    console.log(`${updatedProducts.matchedCount} products were found.`);
+    console.log(`${updatedProducts.modifiedCount || updatedProducts.nModified} products have been successfully updated with discount=50.`);
+    
+    // Fetch all products to display them
+    const allProducts = await Product.find(); // Fetch all fields
+
+    // Display all products with serial number and discount
+    allProducts.forEach((product, index) => {
+      console.log(`${index + 1}. Product ID: ${product._id}, Discount: ${product.discount}`);
+    });
+
+    // Optional: return the fetched products if needed
+    
+  } catch (error) {
+    // Handle any errors that occur during the update
+    console.error("Error updating or fetching data:", error.message);
+    throw error; // You can rethrow the error if needed
+  }
 }
+
+
 
 // Export seedData function
 module.exports = seedData;
