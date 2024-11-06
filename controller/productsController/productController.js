@@ -137,7 +137,7 @@ const createProduct = async (req, res) => {
       subcategoryType: req.body.footwearType,
       tag: req.body.selectedTag,
       rating: 4.7,
-      productName: req.body.productName,
+      // productName: req.body.productName,
       promotionalPrice: req.body.promotionalPrice,
       isPremiumLeather: req.body.isPremiumLeather,
       SellingPrice: req.body.price,
