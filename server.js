@@ -21,7 +21,7 @@ const seedData=require('./seed')
         'https://api.tekipost.com/*',
         'https://tagsfootwear.com',
         'https://admin.tagsfootwear.com',
-        // 'http://localhost:5173'
+        'http://localhost:5173'
       ,
     ];
 
