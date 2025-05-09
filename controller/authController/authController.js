@@ -57,14 +57,16 @@ const registerUser = expressAsyncHandler(async (req, res) => {
     const BASE_URL=`${process.env.BASE_URL}/verify-account/${token}`;
    
     const transporter = nodemailer.createTransport({
-      service: "gmail",
-      host: "smtp.gmail.com",
-      port:  587,
-      secure: false, // Use `true` for port 465, `false` for all other ports
-      auth: {
-        user: "as9467665000@gmail.com",
-        pass: "ddle kjkt haxu vfmz",
-      },
+    host: "mail.tagsfootwear.com", // Change this to your actual SMTP host
+  port: 465, // Use 465 for SSL
+  secure: true, // Set this to true because you're using port 465 (SSL)
+  auth: {
+    user: "tagsfootwear.com", // Your email address
+    pass: "", // Your email password
+  },
+  tls: {
+    rejectUnauthorized: true, // This helps bypass SSL certificate issues
+  },
     });
     
 
@@ -90,7 +92,7 @@ const registerUser = expressAsyncHandler(async (req, res) => {
 
 
 
-    await sendOTPFunction(phoneNumber);
+    // await sendOTPFunction(phoneNumber);
     // await sendMail(transporter, mailOptions);
     res.status(201).json({success:true,responseData});
   } 
